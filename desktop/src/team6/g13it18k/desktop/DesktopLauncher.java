@@ -7,6 +7,9 @@ import team6.g13it18k.ASGame;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+		config.title = "Attention and Speed";
+		config.width = 480;
+		config.height = 320;
 		new LwjglApplication(new ASGame(), config);
 	}
 }
