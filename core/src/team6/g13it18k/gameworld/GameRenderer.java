@@ -2,7 +2,12 @@ package team6.g13it18k.gameworld;
 
 import java.util.List;
 
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenEquations;
+import aurelienribon.tweenengine.TweenManager;
+
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -10,11 +15,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-
-import aurelienribon.tweenengine.Tween;
-import aurelienribon.tweenengine.TweenEquations;
-import aurelienribon.tweenengine.TweenManager;
-
 import team6.g13it18k.TweenAccessors.Value;
 import team6.g13it18k.TweenAccessors.ValueAccessor;
 import team6.g13it18k.asHelpers.AssetLoader;
@@ -29,7 +29,7 @@ public class GameRenderer {
 
     private GameWorld myWorld;
     private ShapeRenderer shapeRenderer;
-
+    
     private SpriteBatch spriteBatch;
 
     private int midPointY;
@@ -40,13 +40,15 @@ public class GameRenderer {
     private Pipe pipe1, pipe2, pipe3;
 
     //Game Assets
-    private TextureRegion bg, grass, birdMid, skullUp, skullDown, bar;
+    private TextureRegion bg, grass, birdMid, skullUp, skullDown, bar, ready,
+			asLogo, gameOver, highScore, scoreboard, star, noStar, retry;
     private Animation<TextureRegion> birdAnimation;
 
     private TweenManager manager;
     private Value alpha = new Value();
 
     private List<SimpleButton> menuButtons;
+    private Color transitionColor;
 
     public GameRenderer(GameWorld world, int gameHeight, int midPointY) {
         myWorld = world;
@@ -64,15 +66,9 @@ public class GameRenderer {
 
         initGameObjects();
         initAssets();
-        setupTween();
-    }
-
-    private void setupTween() {
-        Tween.registerAccessor(Value.class, new ValueAccessor());
-        manager = new TweenManager();
-        Tween.to(alpha, -1, .5f).target(0)
-                .ease(TweenEquations.easeOutQuad)
-                .start(manager);
+        
+        transitionColor = new Color();
+		prepareTransition(255, 255, 255, .5f);
     }
 
     private void initGameObjects() {
@@ -93,6 +89,14 @@ public class GameRenderer {
         skullUp = AssetLoader.skullUp;
         skullDown = AssetLoader.skullDown;
         bar = AssetLoader.bar;
+        ready = AssetLoader.ready;
+		asLogo = AssetLoader.asLogo;
+		gameOver = AssetLoader.gameOver;
+		highScore = AssetLoader.highScore;
+		scoreboard = AssetLoader.scoreboard;
+		retry = AssetLoader.retry;
+		star = AssetLoader.star;
+		noStar = AssetLoader.noStar;
     }
 
     private void drawGrass() {
@@ -120,8 +124,6 @@ public class GameRenderer {
     }
 
     private void drawPipes() {
-        // Временный код, извините за кашу :)
-        // Мы это починим, как только закончим с Pipe классом.
         spriteBatch.draw(bar, pipe1.getX(), pipe1.getY(), pipe1.getWidth(),
                 pipe1.getHeight());
         spriteBatch.draw(bar, pipe1.getX(), pipe1.getY() + pipe1.getHeight() + 45,
@@ -161,15 +163,66 @@ public class GameRenderer {
     }
 
     private void drawMenuUI() {
-        spriteBatch.draw(AssetLoader.asLogo, 136 / 2 - 56, midPointY - 50,
-                AssetLoader.asLogo.getRegionWidth() / 1.2f,
-                AssetLoader.asLogo.getRegionHeight() / 1.2f);
+        spriteBatch.draw(asLogo, 136 / 2 - 56, midPointY - 50,
+                asLogo.getRegionWidth() / 1.2f, asLogo.getRegionHeight() / 1.2f);
 
         for (SimpleButton button : menuButtons) {
             button.draw(spriteBatch);
         }
 
     }
+    
+    private void drawScoreboard() {
+		spriteBatch.draw(scoreboard, 22, midPointY - 30, 97, 37);
+
+		spriteBatch.draw(noStar, 25, midPointY - 15, 10, 10);
+		spriteBatch.draw(noStar, 37, midPointY - 15, 10, 10);
+		spriteBatch.draw(noStar, 49, midPointY - 15, 10, 10);
+		spriteBatch.draw(noStar, 61, midPointY - 15, 10, 10);
+		spriteBatch.draw(noStar, 73, midPointY - 15, 10, 10);
+
+		if (myWorld.getScore() > 2) {
+			spriteBatch.draw(star, 73, midPointY - 15, 10, 10);
+		}
+
+		if (myWorld.getScore() > 17) {
+			spriteBatch.draw(star, 61, midPointY - 15, 10, 10);
+		}
+
+		if (myWorld.getScore() > 50) {
+			spriteBatch.draw(star, 49, midPointY - 15, 10, 10);
+		}
+
+		if (myWorld.getScore() > 80) {
+			spriteBatch.draw(star, 37, midPointY - 15, 10, 10);
+		}
+
+		if (myWorld.getScore() > 120) {
+			spriteBatch.draw(star, 25, midPointY - 15, 10, 10);
+		}
+
+		int length = ("" + myWorld.getScore()).length();
+
+		AssetLoader.whiteFont.draw(spriteBatch, "" + myWorld.getScore(),
+				104 - (2 * length), midPointY - 20);
+
+		int length2 = ("" + AssetLoader.getHighScore()).length();
+		AssetLoader.whiteFont.draw(spriteBatch, "" + AssetLoader.getHighScore(),
+				104 - (2.5f * length2), midPointY - 3);
+
+	}
+    
+    private void drawRetry() {
+		spriteBatch.draw(retry, 36, midPointY + 10, 66, 14);
+	}
+
+	private void drawReady() {
+		spriteBatch.draw(ready, 36, midPointY - 50, 68, 14);
+	}
+
+	private void drawGameOver() {
+		spriteBatch.draw(gameOver, 24, midPointY - 50, 92, 14);
+	}
 
     private void drawScore() {
         int length = ("" + myWorld.getScore()).length();
@@ -178,8 +231,10 @@ public class GameRenderer {
         AssetLoader.font.draw(spriteBatch, "" + myWorld.getScore(),
                 68 - (3 * length), midPointY - 83);
     }
-
-
+    
+    private void drawHighScore() {
+		spriteBatch.draw(highScore, 22, midPointY - 50, 96, 14);
+	}
 
     public void render(float delta, float runTime) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -203,7 +258,6 @@ public class GameRenderer {
 
         spriteBatch.draw(bg, 0, midPointY + 23, 136, 43);
 
-        drawGrass();
         drawPipes();
 
         spriteBatch.enableBlending();
@@ -214,21 +268,36 @@ public class GameRenderer {
             drawScore();
         } else if (myWorld.isReady()) {
             drawBird(runTime);
-            drawScore();
+            drawReady();
         } else if (myWorld.isMenu()) {
             drawBirdCentered(runTime);
             drawMenuUI();
         } else if (myWorld.isGameOver()) {
-            drawBird(runTime);
-            drawScore();
+            drawScoreboard();
+			drawBird(runTime);
+			drawGameOver();
+			drawRetry();
         } else if (myWorld.isHighScore()) {
-            drawBird(runTime);
-            drawScore();
+            drawScoreboard();
+			drawBird(runTime);
+			drawHighScore();
+			drawRetry();
         }
+        
+        drawGrass();
 
         spriteBatch.end();
         drawTransition(delta);
     }
+    
+    void prepareTransition(int r, int g, int b, float duration) {
+		transitionColor.set(r / 255.0f, g / 255.0f, b / 255.0f, 1);
+		alpha.setValue(1);
+		Tween.registerAccessor(Value.class, new ValueAccessor());
+		manager = new TweenManager();
+		Tween.to(alpha, -1, duration).target(0)
+				.ease(TweenEquations.easeOutQuad).start(manager);
+	}
 
     private void drawTransition(float delta) {
         if (alpha.getValue() > 0) {

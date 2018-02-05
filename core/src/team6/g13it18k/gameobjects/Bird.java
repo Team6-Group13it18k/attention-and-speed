@@ -12,7 +12,7 @@ public class Bird {
 
     private float rotation;
     private int width;
-    private int height;
+    private float height;
 
     private float originalY;
 
@@ -115,7 +115,7 @@ public class Bird {
         return width;
     }
 
-    public int getHeight() {
+    public float getHeight() {
         return height;
     }
 

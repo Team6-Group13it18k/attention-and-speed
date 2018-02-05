@@ -30,6 +30,10 @@ public class Scrollable {
         position.x = newX;
         isScrolledLeft = false;
     }
+    
+    void stop() {
+        velocity.x = 0;
+    }
 
     boolean isScrolledLeft() {
         return isScrolledLeft;
@@ -38,11 +42,7 @@ public class Scrollable {
     float getTailX() {
         return position.x + width;
     }
-
-    void stop() {
-        velocity.x = 0;
-    }
-
+    
     public float getX() {
         return position.x;
     }

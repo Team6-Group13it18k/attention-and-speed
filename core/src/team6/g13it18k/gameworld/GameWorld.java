@@ -15,6 +15,7 @@ public class GameWorld {
     private int score = 0;
     private float runTime = 0;
     private int midPointY;
+    private GameRenderer renderer;
 
     private GameState currentState;
 
@@ -25,7 +26,7 @@ public class GameWorld {
     public GameWorld(int midPointY) {
         currentState = GameState.MENU;
         this.midPointY = midPointY;
-        bird = new Bird(33, midPointY - 5, 17, 22);
+        bird = new Bird(33, midPointY - 5, 34, 22);
         scroller = new ScrollHandler(this, midPointY + 66);
         ground = new Rectangle(0, midPointY + 66, 136, 11);
 
@@ -66,11 +67,22 @@ public class GameWorld {
             scroller.stop();
             bird.die();
             AssetLoader.dead.play();
+            renderer.prepareTransition(255, 255, 255, .3f);
+            
+            AssetLoader.fall.play();
         }
 
         if (Intersector.overlaps(bird.getBoundingCircle(), ground)) {
+            
+            if (bird.isAlive()) {
+				AssetLoader.dead.play();
+				renderer.prepareTransition(255, 255, 255, .3f);
+
+				bird.die();
+			}
+            
+            
             scroller.stop();
-            bird.die();
             bird.decelerate();
             currentState = GameState.GAMEOVER;
 
@@ -106,15 +118,15 @@ public class GameWorld {
     }
 
     public void ready() {
-        currentState = GameState.READY;
-    }
+		currentState = GameState.READY;
+		renderer.prepareTransition(0, 0, 0, 1f);
+	}
 
     public void restart() {
-        currentState = GameState.READY;
         score = 0;
         bird.onRestart(midPointY - 5);
         scroller.onRestart();
-        currentState = GameState.READY;
+        ready();
     }
 
     public boolean isReady() {
@@ -133,7 +145,11 @@ public class GameWorld {
         return currentState == GameState.MENU;
     }
 
-    boolean isRunning() {
+    public boolean isRunning() {
         return currentState == GameState.RUNNING;
     }
+    
+    public void setRenderer(GameRenderer renderer) {
+		this.renderer = renderer;
+	}
 }

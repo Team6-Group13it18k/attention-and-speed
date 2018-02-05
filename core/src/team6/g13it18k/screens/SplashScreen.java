@@ -1,15 +1,15 @@
 package team6.g13it18k.screens;
 
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenCallback;
+import aurelienribon.tweenengine.TweenEquations;
+import aurelienribon.tweenengine.TweenManager;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
-import aurelienribon.tweenengine.Tween;
-import aurelienribon.tweenengine.TweenCallback;
-import aurelienribon.tweenengine.TweenEquations;
-import aurelienribon.tweenengine.TweenManager;
 
 import team6.g13it18k.ASGame;
 import team6.g13it18k.TweenAccessors.SpriteAccessor;

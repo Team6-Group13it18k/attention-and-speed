@@ -12,21 +12,17 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class AssetLoader {
 
     private static Texture texture, logoTexture;
-    public static TextureRegion logo;
-    public static TextureRegion asLogo;
-    public static TextureRegion bg;
-    public static TextureRegion grass;
-    public static TextureRegion bird;
-    public static TextureRegion skullUp;
-    public static TextureRegion skullDown;
-    public static TextureRegion bar;
 
-    static TextureRegion playButtonDown;
-    static TextureRegion playButtonUp;
+    public static TextureRegion logo, asLogo;
+    public static TextureRegion bg, grass;
+    public static TextureRegion bird, birdDown, birdUp;
+    public static TextureRegion skullUp, skullDown, bar;
+    public static TextureRegion playButtonDown, playButtonUp;
+    public static TextureRegion ready, gameOver, highScore, scoreboard, star, noStar, retry;
 
-    public static Animation<TextureRegion> birdAnimation; //тут
-    public static Sound dead, flap, coin;
-    public static BitmapFont font, shadow;
+    public static Animation<TextureRegion> birdAnimation;
+    public static Sound dead, flap, coin, fall;
+    public static BitmapFont font, shadow, whiteFont;
     private static Preferences prefs;
 
 
@@ -38,36 +34,54 @@ public class AssetLoader {
         logo = new TextureRegion(logoTexture, 0, 0, 512, 114);
 
         texture = new Texture(Gdx.files.internal("data/texture.png"));
-        texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+        texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
         playButtonUp = new TextureRegion(texture, 0, 83, 29, 16);
         playButtonDown = new TextureRegion(texture, 29, 83, 29, 16);
         playButtonUp.flip(false, true);
         playButtonDown.flip(false, true);
+        
+        ready = new TextureRegion(texture, 59, 83, 34, 7);
+		ready.flip(false, true);
 
+		retry = new TextureRegion(texture, 59, 110, 33, 7);
+		retry.flip(false, true);
+		
+		gameOver = new TextureRegion(texture, 59, 92, 46, 7);
+		gameOver.flip(false, true);
+
+		scoreboard = new TextureRegion(texture, 111, 83, 97, 37);
+		scoreboard.flip(false, true);
+
+		star = new TextureRegion(texture, 152, 70, 10, 10);
+		noStar = new TextureRegion(texture, 165, 70, 10, 10);
+		star.flip(false, true);
+		noStar.flip(false, true);
+
+		highScore = new TextureRegion(texture, 59, 101, 48, 7);
+		highScore.flip(false, true);
+        
         asLogo = new TextureRegion(texture, 0, 55, 135, 24);
         asLogo.flip(false, true);
-
+        
         bg = new TextureRegion(texture, 0, 0, 136, 43);
         bg.flip(false, true);
 
         grass = new TextureRegion(texture, 0, 43, 143, 11);
         grass.flip(false, true);
 
-        TextureRegion birdDown = new TextureRegion(texture, 136, 0, 17, 12);
+        birdDown = new TextureRegion(texture, 136, 0, 17, 12);
         birdDown.flip(false, true);
 
         bird = new TextureRegion(texture, 153, 0, 17, 12);
         bird.flip(false, true);
 
-        TextureRegion birdUp = new TextureRegion(texture, 170, 0, 17, 12);
+        birdUp = new TextureRegion(texture, 170, 0, 17, 12);
         birdUp.flip(false, true);
 
-//тут проблема
-        TextureRegion[] birds = {birdDown, bird, birdUp};
+        TextureRegion[] birds = { birdDown, bird, birdUp };
         birdAnimation = new Animation<>(0.06f, birds);
         birdAnimation.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
-//тут проблема
 
         skullUp = new TextureRegion(texture, 192, 0, 24, 14);
         skullDown = new TextureRegion(skullUp);
@@ -79,15 +93,19 @@ public class AssetLoader {
         dead = Gdx.audio.newSound(Gdx.files.internal("data/dead.wav"));
         flap = Gdx.audio.newSound(Gdx.files.internal("data/flap.wav"));
         coin = Gdx.audio.newSound(Gdx.files.internal("data/coin.wav"));
+        fall = Gdx.audio.newSound(Gdx.files.internal("data/fall.wav"));
 
         font = new BitmapFont(Gdx.files.internal("data/text.fnt"));
         font.getData().setScale(.25f, -.25f);
+        
+        whiteFont = new BitmapFont(Gdx.files.internal("data/whitetext.fnt"));
+		whiteFont.getData().setScale(.1f, -.1f);
+        
         shadow = new BitmapFont(Gdx.files.internal("data/shadow.fnt"));
         shadow.getData().setScale(.25f, -.25f);
 
         prefs = Gdx.app.getPreferences("AttentionAndSpeed");
 
-        // Создадим переменую для хранения лучшего счета со значением по умолчанию 0
         if (!prefs.contains("highScore")) {
             prefs.putInteger("highScore", 0);
         }
@@ -108,8 +126,10 @@ public class AssetLoader {
         dead.dispose();
         flap.dispose();
         coin.dispose();
+        fall.dispose();
         font.dispose();
         shadow.dispose();
+        whiteFont.dispose();
     }
 
 }

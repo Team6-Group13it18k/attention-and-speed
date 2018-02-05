@@ -1,10 +1,10 @@
 package team6.g13it18k.asHelpers;
 
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.InputProcessor;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputProcessor;
 
 import team6.g13it18k.gameobjects.Bird;
 import team6.g13it18k.gameworld.GameWorld;
@@ -43,14 +43,15 @@ public class InputHandler implements InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         screenX = scaleX(screenX);
         screenY = scaleY(screenY);
-        System.out.println(screenX + " " + screenY);
+
         if (myWorld.isMenu()) {
             playButton.isTouchDown(screenX, screenY);
         } else if (myWorld.isReady()) {
             myWorld.start();
-        }
-
-        myBird.onClick();
+            myBird.onClick();
+        } else if (myWorld.isRunning()) {
+			myBird.onClick();
+		}
 
         if (myWorld.isGameOver() || myWorld.isHighScore()) {
             myWorld.restart();

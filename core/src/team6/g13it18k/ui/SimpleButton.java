@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
+import team6.g13it18k.asHelpers.AssetLoader;
+
 public class SimpleButton {
 
     private float x, y, width, height;
@@ -54,6 +56,7 @@ public class SimpleButton {
 
         if (bounds.contains(screenX, screenY) && isPressed) {
             isPressed = false;
+            AssetLoader.flap.play();
             return true;
         }
 

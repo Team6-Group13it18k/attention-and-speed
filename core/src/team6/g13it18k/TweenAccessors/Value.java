@@ -8,7 +8,7 @@ public class Value {
         return val;
     }
 
-    void setValue(float newVal) {
+    public void setValue(float newVal) {
         val = newVal;
     }
 
