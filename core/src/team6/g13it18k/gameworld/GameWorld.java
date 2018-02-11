@@ -26,7 +26,7 @@ public class GameWorld {
     public GameWorld(int midPointY) {
         currentState = GameState.MENU;
         this.midPointY = midPointY;
-        bird = new Bird(33, midPointY - 5, 34, 22);
+        bird = new Bird(33, midPointY - 5, 32, 22);
         scroller = new ScrollHandler(this, midPointY + 66);
         ground = new Rectangle(0, midPointY + 66, 136, 11);
 

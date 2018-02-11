@@ -1,5 +1,6 @@
 package team6.g13it18k.screens;
 
+import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.TweenEquations;
@@ -47,7 +48,12 @@ public class SplashScreen implements Screen {
         Tween.registerAccessor(Sprite.class, new SpriteAccessor());
         manager = new TweenManager();
 
-        TweenCallback cb = (type, source) -> game.setScreen(new GameScreen());
+        TweenCallback cb = new TweenCallback() {
+            @Override
+            public void onEvent(int type, BaseTween<?> source) {
+                game.setScreen(new GameScreen());
+            }
+        };
 
         Tween.to(sprite, SpriteAccessor.ALPHA, .8f).target(1)
                 .ease(TweenEquations.easeInOutQuad).repeatYoyo(1, .4f)
