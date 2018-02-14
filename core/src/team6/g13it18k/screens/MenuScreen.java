@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import team6.g13it18k.ASGame;
@@ -26,24 +27,53 @@ public class MenuScreen implements Screen {
 
     MenuScreen(final ASGame gam) {
         game = gam;
-
         stage = new Stage();
         stage.addActor(game.background);
+    }
 
-        Skin skin = new Skin();
-        TextureAtlas buttonAtlas = new TextureAtlas(Gdx.files.internal("packer/images.pack"));
-        skin.addRegions(buttonAtlas);
-        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
+    @Override
+    public void show() {
+
+        buttons();
+        setHandlerButtons();
+
+        float button_width = Gdx.graphics.getWidth()  * 0.1f * 5.5f;
+        float button_height = button_width / 3.1848f;
+
+        table = new Table().center();
+        table.setFillParent(true);
+        table.setDebug(false);
+
+        table.add(play).width(button_width).height(button_height);
+        table.row();
+        table.add(level).width(button_width).height(button_height);
+        table.row();
+        table.add(record).width(button_width).height(button_height);
+        table.row();
+        table.add(help).width(button_width).height(button_height);
+        stage.addActor(table);
+
+        Gdx.input.setInputProcessor(stage);
+        Gdx.input.setCatchBackKey(true);
+    }
+
+
+    private void buttons(){
+        Skin skin = new Skin(new TextureAtlas(Gdx.files.internal("packer/images.pack")));
+
+        TextButtonStyle textButtonStyle = new TextButtonStyle();
         textButtonStyle.font = game.font;
         textButtonStyle.up = skin.getDrawable("button-up");
         textButtonStyle.down = skin.getDrawable("button-down");
         textButtonStyle.checked = skin.getDrawable("button-up");
 
-        table = new Table();
-        table.setFillParent(true);
-
-        // Кнопка играть. Добавляем новый listener, чтобы слушать события касания. После касания, выбрирует и переключает на экран выбора уровней, а этот экран уничтожается
         play = new TextButton("Играть", textButtonStyle);
+        level = new TextButton("Уровни", textButtonStyle);
+        record = new TextButton("Рекорды", textButtonStyle);
+        help = new TextButton("Помощь", textButtonStyle);
+    }
+
+    private void setHandlerButtons(){
         play.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -57,7 +87,6 @@ public class MenuScreen implements Screen {
             }
         });
 
-        level = new TextButton("Уровни", textButtonStyle);
         level.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -71,8 +100,6 @@ public class MenuScreen implements Screen {
             }
         });
 
-        // Кнопка выхода. Вообще это не обязательно. Просто для красоты, ибо обычно пользователь жмет на кнопку телефона.
-        record = new TextButton("Рекорды", textButtonStyle);
         record.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -86,7 +113,6 @@ public class MenuScreen implements Screen {
             }
         });
 
-        help = new TextButton("Помощь", textButtonStyle);
         help.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -99,18 +125,6 @@ public class MenuScreen implements Screen {
                 dispose();
             }
         });
-
-        table.add(play);
-        table.row();
-        table.add(level);
-        table.row();
-        table.add(record);
-        table.row();
-        table.add(help);
-        stage.addActor(table);
-
-        Gdx.input.setInputProcessor(stage);  // Устанавливаем нашу сцену основным процессором для ввода (нажатия, касания, клавиатура etc.)
-        Gdx.input.setCatchBackKey(true); // Это нужно для того, чтобы пользователь возвращался назад, в случае нажатия на кнопку Назад на своем устройстве
     }
 
     @Override
@@ -123,30 +137,22 @@ public class MenuScreen implements Screen {
     }
 
     @Override
-    public void show() {}
-
-    @Override
     public void resize(int width, int height) {
-
+        stage.getViewport().update(width, height, true);
     }
 
     @Override
-    public void pause() {
-
-    }
+    public void pause() {}
 
     @Override
-    public void resume() {
-
-    }
+    public void resume() {}
 
     @Override
-    public void hide() {
-
-    }
+    public void hide() {}
 
     @Override
     public void dispose() {
+        stage.dispose();
         game.dispose();
     }
 }

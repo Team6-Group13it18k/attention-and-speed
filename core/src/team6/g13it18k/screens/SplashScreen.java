@@ -24,14 +24,15 @@ public class SplashScreen implements Screen {
 
     public SplashScreen(final ASGame gam) {
         game = gam;
+        stage = new Stage();
+    }
 
+    @Override
+    public void show() {
         splashImage = new Texture("logo.png");
         splashImage.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-        TextureRegion textureRegion = new TextureRegion(splashImage, 0, 0, 512, 128);
 
-        stage = new Stage();
-
-        Image actorImage = new Image(textureRegion);
+        Image actorImage = new Image(new TextureRegion(splashImage, 0, 0, 512, 128));
 
         float width = Gdx.graphics.getWidth();
         float height = Gdx.graphics.getHeight();
@@ -40,20 +41,14 @@ public class SplashScreen implements Screen {
 
         actorImage.setSize(actorImage.getWidth() * scale, actorImage.getHeight() * scale);
         actorImage.setPosition(width / 2 - actorImage.getWidth() / 2, height / 2 - actorImage.getHeight() / 2);
-        actorImage.addAction(
-                sequence(
-                        fadeOut(4),
-                        run(
-                                new Runnable(){
-                                    @Override
-                                    public void run() {
-                                        game.setScreen(new MenuScreen(game));
-                                        dispose();
-                                    }
-                                }
-                        )
-                )
-        );
+
+        actorImage.addAction(sequence(
+                fadeOut(3),
+                run(() -> {
+                    game.setScreen(new MenuScreen(game));
+                    dispose();
+                })
+        ));
         stage.addActor(actorImage);
     }
 
@@ -65,9 +60,6 @@ public class SplashScreen implements Screen {
         stage.act(delta);
         stage.draw();
     }
-
-    @Override
-    public void show() {}
 
     @Override
     public void resize(int width, int height) {}
