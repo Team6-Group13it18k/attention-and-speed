@@ -33,6 +33,7 @@ public class HelpScreen implements Screen {
 
     @Override
     public void show() {
+        Gdx.app.log("HelpScreen", "show");
 
         Label.LabelStyle style = new Label.LabelStyle(textFont, Color.WHITE);
         text = new Label("Давно выяснено, что при оценке дизайна и композиции читаемый текст мешает сосредоточиться. Lorem Ipsum используют потому, что тот обеспечивает более или менее стандартное заполнение шаблона, а также реальное распределение букв и пробелов в абзацах, которое не получается при простой дубликации \"Здесь ваш текст.. Здесь ваш текст.. Здесь ваш текст..\" Многие программы электронной вёрстки и редакторы HTML используют Lorem Ipsum в качестве текста по умолчанию, так что поиск по ключевым словам \"lorem ipsum\" сразу показывает, как много веб-страниц всё ещё дожидаются своего настоящего рождения. За прошедшие годы текст Lorem Ipsum получил много версий. Некоторые версии появились по ошибке, некоторые - намеренно (например, юмористические варианты).", style);
@@ -50,7 +51,6 @@ public class HelpScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.app.log("MenuScreen", "render");
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 

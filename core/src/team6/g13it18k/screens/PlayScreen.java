@@ -1,6 +1,7 @@
 package team6.g13it18k.screens;
 
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 
 import team6.g13it18k.ASGame;
@@ -18,6 +19,7 @@ public class PlayScreen implements Screen {
 
     @Override
     public void show() {
+        Gdx.app.log("PlayScreen", "show");
 
     }
 

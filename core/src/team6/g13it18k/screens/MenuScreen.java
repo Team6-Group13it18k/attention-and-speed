@@ -33,6 +33,7 @@ public class MenuScreen implements Screen {
 
     @Override
     public void show() {
+        Gdx.app.log("MenuScreen", "show");
 
         buttons();
         setHandlerButtons();

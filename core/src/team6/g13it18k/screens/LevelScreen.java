@@ -26,6 +26,9 @@ public class LevelScreen implements Screen {
 
     @Override
     public void show() {
+        Gdx.app.log("LevelScreen", "show");
+
+
 
     }
 
