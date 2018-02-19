@@ -1,6 +1,7 @@
 package team6.g13it18k.screens;
 
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 
 import team6.g13it18k.ASGame;
@@ -19,6 +20,7 @@ public class HighscoresScreen implements Screen {
 
     @Override
     public void show() {
+        Gdx.app.log("HighscoresScreen", "show");
 
     }
 

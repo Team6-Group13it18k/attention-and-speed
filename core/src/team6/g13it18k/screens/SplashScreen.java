@@ -29,6 +29,7 @@ public class SplashScreen implements Screen {
 
     @Override
     public void show() {
+        Gdx.app.log("SplashScreen", "show");
         splashImage = new Texture("logo.png");
         splashImage.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
