@@ -45,9 +45,12 @@ public class SplashScreen implements Screen {
 
         actorImage.addAction(sequence(
                 fadeOut(3),
-                run(() -> {
-                    game.setScreen(new MenuScreen(game));
-                    dispose();
+                run(new Runnable(){
+                    @Override
+                    public void run() {
+                        game.setScreen(new MenuScreen(game));
+                        dispose();
+                    }
                 })
         ));
         stage.addActor(actorImage);
