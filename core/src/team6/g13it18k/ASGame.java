@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
 import team6.g13it18k.objects.BackgroundActor;
 import team6.g13it18k.objects.GeneratorFont;
+import team6.g13it18k.screens.PlayScreen;
 import team6.g13it18k.screens.SplashScreen;
 
 /**
@@ -20,6 +21,6 @@ public class ASGame extends Game {
     public void create() {
         font = new GeneratorFont(18, Color.WHITE, GeneratorFont.FontType.FONT_REGULAR).getFont();
         background = new BackgroundActor(0, 0);
-        setScreen(new SplashScreen(this));
+        setScreen(new PlayScreen(this));
     }
 }

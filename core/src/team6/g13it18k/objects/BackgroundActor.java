@@ -23,6 +23,10 @@ public class BackgroundActor extends Actor {
         setPosition(x, y);
     }
 
+    public Sprite getBackgroundSprite() {
+        return backgroundSprite;
+    }
+
     @Override
     public void draw(Batch batch, float parentAlpha) {
         backgroundSprite.draw(batch);
