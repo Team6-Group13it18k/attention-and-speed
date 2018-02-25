@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import team6.g13it18k.ASGame;
+import team6.g13it18k.objects.BackgroundActor;
 
 /**
  * Данный класс реализует окно выбора уровней
@@ -27,6 +28,8 @@ public class LevelScreen implements Screen {
     @Override
     public void show() {
         Gdx.app.log("LevelScreen", "show");
+
+        Gdx.input.setCatchBackKey(true);
 
 
 

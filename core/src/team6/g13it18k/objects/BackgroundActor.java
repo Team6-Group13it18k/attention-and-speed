@@ -13,13 +13,14 @@ public class BackgroundActor extends Actor {
 
     private Sprite backgroundSprite;
 
-    public BackgroundActor() {
+    public BackgroundActor(float x, float y) {
         float width = Gdx.graphics.getWidth();
         float height = Gdx.graphics.getHeight();
 
         Texture backgroundTexture = new Texture("sky-background.jpg");
         backgroundSprite = new Sprite(backgroundTexture);
         backgroundSprite.setSize(width, height);
+        setPosition(x, y);
     }
 
     @Override

@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import team6.g13it18k.ASGame;
+import team6.g13it18k.objects.BackgroundActor;
 
 /**
  * Данный класс реализует окно меню
@@ -23,7 +24,6 @@ public class MenuScreen implements Screen {
 
     private Stage stage;
     private TextButton play, level, record, help;
-    private Table table;
 
     MenuScreen(final ASGame gam) {
         game = gam;
@@ -41,7 +41,7 @@ public class MenuScreen implements Screen {
         float button_width = Gdx.graphics.getWidth()  * 0.1f * 5.5f;
         float button_height = button_width / 3.1848f;
 
-        table = new Table().center();
+        Table table = new Table().center();
         table.setFillParent(true);
         table.setDebug(false);
 

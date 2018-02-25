@@ -13,7 +13,7 @@ public class PlayScreen implements Screen {
 
     private final ASGame game;
 
-    public PlayScreen(final ASGame gam) {
+    PlayScreen(final ASGame gam) {
         game = gam;
     }
 
@@ -21,6 +21,7 @@ public class PlayScreen implements Screen {
     public void show() {
         Gdx.app.log("PlayScreen", "show");
 
+        Gdx.input.setCatchBackKey(true);
     }
 
     @Override
