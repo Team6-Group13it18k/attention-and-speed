@@ -18,7 +18,7 @@ public class ASGame extends Game {
 
     @Override
     public void create() {
-        font = new GeneratorFont(18, Color.WHITE).getFont();
+        font = new GeneratorFont(18, Color.WHITE, GeneratorFont.FontType.FONT_REGULAR).getFont();
         background = new BackgroundActor(0, 0);
         setScreen(new SplashScreen(this));
     }

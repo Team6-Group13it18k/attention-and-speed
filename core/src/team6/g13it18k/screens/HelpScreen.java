@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -24,7 +25,7 @@ public class HelpScreen implements Screen {
     private final ASGame game;
 
     private Stage stage;
-    private LabelStyle labelStyle;
+    private LabelStyle labelStyleText, labelStyleTitle;
 
     private MyImageButton backToMenu;
 
@@ -34,7 +35,14 @@ public class HelpScreen implements Screen {
         stage = new Stage();
         stage.addActor(game.background);
 
-        labelStyle = new LabelStyle(new GeneratorFont(14, Color.WHITE).getFont(), Color.WHITE);
+        labelStyleText = new LabelStyle(
+                new GeneratorFont(14, Color.WHITE, GeneratorFont.FontType.FONT_REGULAR).getFont(),
+                Color.WHITE
+        );
+        labelStyleTitle = new LabelStyle(
+                new GeneratorFont(18, Color.WHITE, GeneratorFont.FontType.FONT_BOLD).getFont(),
+                Color.WHITE
+        );
 
         Gdx.input.setInputProcessor(stage);
         Gdx.input.setCatchBackKey(true);
@@ -46,14 +54,14 @@ public class HelpScreen implements Screen {
 
         float widthText = Gdx.graphics.getWidth()  * .9f;
 
-        Label text = new Label(Gdx.files.internal("txt/help.txt").readString("UTF-8"), labelStyle);
+        Label text = new Label(Gdx.files.internal("txt/help.txt").readString("UTF-8"), labelStyleText);
         text.setWrap(true);
 
         Table table = new Table();
         table.setFillParent(true);
-        table.setDebug(true); //для отладки
+        table.setDebug(false);
 
-        table.add(new Label("Attention and Speed", labelStyle));
+        table.add(new Label("Внимание и Скорость : Помощь", labelStyleTitle));
         table.row();
 
         table.add(text).expandX().width(widthText).expandY();
@@ -61,8 +69,7 @@ public class HelpScreen implements Screen {
 
         generateButton();
 
-        table.add(backToMenu).bottom().left();
-
+        table.add(backToMenu).size(25, 25).bottom().left();
 
         stage.addActor(table);
     }
