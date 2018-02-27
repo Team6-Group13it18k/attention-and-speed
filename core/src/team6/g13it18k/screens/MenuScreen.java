@@ -2,10 +2,12 @@ package team6.g13it18k.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -13,6 +15,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import team6.g13it18k.ASGame;
+import team6.g13it18k.objects.BackgroundActor;
+import team6.g13it18k.objects.GeneratorFont;
 
 /**
  * Данный класс реализует окно меню
@@ -23,12 +27,17 @@ public class MenuScreen implements Screen {
 
     private Stage stage;
     private TextButton play, level, record, help;
-    private Table table;
+    private Label.LabelStyle labelStyleTitle;
 
     MenuScreen(final ASGame gam) {
         game = gam;
         stage = new Stage();
         stage.addActor(game.background);
+
+        labelStyleTitle = new Label.LabelStyle(
+                new GeneratorFont(18, Color.WHITE, GeneratorFont.FontType.FONT_BOLD).getFont(),
+                Color.WHITE
+        );
     }
 
     @Override
@@ -36,15 +45,17 @@ public class MenuScreen implements Screen {
         Gdx.app.log("MenuScreen", "show");
 
         buttons();
-        setHandlerButtons();
 
         float button_width = Gdx.graphics.getWidth()  * 0.1f * 5.5f;
         float button_height = button_width / 3.1848f;
 
-        table = new Table().center();
+        Table table = new Table().center();
         table.setFillParent(true);
         table.setDebug(false);
 
+
+        table.add(new Label("Внимание и Скорость", labelStyleTitle)).top().padBottom(50);
+        table.row();
         table.add(play).width(button_width).height(button_height);
         table.row();
         table.add(level).width(button_width).height(button_height);
@@ -69,12 +80,6 @@ public class MenuScreen implements Screen {
         textButtonStyle.checked = skin.getDrawable("button-up");
 
         play = new TextButton("Играть", textButtonStyle);
-        level = new TextButton("Уровни", textButtonStyle);
-        record = new TextButton("Рекорды", textButtonStyle);
-        help = new TextButton("Помощь", textButtonStyle);
-    }
-
-    private void setHandlerButtons(){
         play.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -87,7 +92,7 @@ public class MenuScreen implements Screen {
                 dispose();
             }
         });
-
+        level = new TextButton("Уровни", textButtonStyle);
         level.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -100,7 +105,7 @@ public class MenuScreen implements Screen {
                 dispose();
             }
         });
-
+        record = new TextButton("Рекорды", textButtonStyle);
         record.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -113,7 +118,7 @@ public class MenuScreen implements Screen {
                 dispose();
             }
         });
-
+        help = new TextButton("Помощь", textButtonStyle);
         help.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
@@ -25,6 +26,9 @@ public class SplashScreen implements Screen {
     public SplashScreen(final ASGame gam) {
         game = gam;
         stage = new Stage();
+
+        game.manager.load("atlas/buttons.atlas", TextureAtlas.class);
+        game.manager.load("atlas/pets.atlas", TextureAtlas.class);
     }
 
     @Override
@@ -43,16 +47,8 @@ public class SplashScreen implements Screen {
         actorImage.setSize(actorImage.getWidth() * scale, actorImage.getHeight() * scale);
         actorImage.setPosition(width / 2 - actorImage.getWidth() / 2, height / 2 - actorImage.getHeight() / 2);
 
-        actorImage.addAction(sequence(
-                fadeOut(3),
-                run(new Runnable(){
-                    @Override
-                    public void run() {
-                        game.setScreen(new MenuScreen(game));
-                        dispose();
-                    }
-                })
-        ));
+        actorImage.addAction(sequence(fadeOut(2)));
+
         stage.addActor(actorImage);
     }
 
@@ -63,6 +59,11 @@ public class SplashScreen implements Screen {
 
         stage.act(delta);
         stage.draw();
+
+        if(game.manager.update()){
+            game.setScreen(new MenuScreen(game));
+            dispose();
+        }
     }
 
     @Override

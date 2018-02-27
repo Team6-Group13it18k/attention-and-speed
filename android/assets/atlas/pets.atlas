@@ -1,0 +1,62 @@
+
+pets.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+pets1
+  rotate: false
+  xy: 442, 542
+  size: 381, 535
+  orig: 381, 535
+  offset: 0, 0
+  index: -1
+pets2
+  rotate: false
+  xy: 2, 488
+  size: 438, 589
+  orig: 438, 589
+  offset: 0, 0
+  index: -1
+pets3
+  rotate: false
+  xy: 2, 1079
+  size: 534, 606
+  orig: 534, 606
+  offset: 0, 0
+  index: -1
+pets4
+  rotate: false
+  xy: 1028, 1190
+  size: 419, 495
+  orig: 419, 495
+  offset: 0, 0
+  index: -1
+pets5
+  rotate: false
+  xy: 538, 1188
+  size: 488, 497
+  orig: 488, 497
+  offset: 0, 0
+  index: -1
+pets6
+  rotate: false
+  xy: 1449, 1249
+  size: 470, 436
+  orig: 470, 436
+  offset: 0, 0
+  index: -1
+pets7
+  rotate: false
+  xy: 825, 743
+  size: 452, 443
+  orig: 452, 443
+  offset: 0, 0
+  index: -1
+pets8
+  rotate: false
+  xy: 2, 2
+  size: 434, 484
+  orig: 434, 484
+  offset: 0, 0
+  index: -1

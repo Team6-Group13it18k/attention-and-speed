@@ -13,7 +13,7 @@ public class HighscoresScreen implements Screen {
 
     private final ASGame game;
 
-    public HighscoresScreen(final ASGame gam) {
+    HighscoresScreen(final ASGame gam) {
         game = gam;
 
     }
@@ -21,6 +21,8 @@ public class HighscoresScreen implements Screen {
     @Override
     public void show() {
         Gdx.app.log("HighscoresScreen", "show");
+
+        Gdx.input.setCatchBackKey(true);
 
     }
 
