@@ -21,6 +21,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import team6.g13it18k.ASGame;
 import team6.g13it18k.objects.GeneratorFont;
+import team6.g13it18k.objects.GeneratorFont.FontType;
+import team6.g13it18k.objects.HelperStyle;
 
 /**
  * Данный класс реализует окно самой игры
@@ -51,12 +53,12 @@ public class PlayScreen implements Screen {
 
         isDebug = false;
 
-        skinButtons = new Skin(new TextureAtlas(Gdx.files.internal("atlas/buttons.atlas")));
-        skinPets = new Skin(new TextureAtlas(Gdx.files.internal("atlas/pets.atlas")));
+        skinButtons = new Skin(game.manager.get("atlas/buttons.atlas", TextureAtlas.class));
+        skinPets = new Skin(game.manager.get("atlas/pets.atlas", TextureAtlas.class));
 
         pets = new Array<>();
         for (int i = 1; i < 7; i++){
-            pets.add(new ImageButton(getStylePets(i, i)));
+            pets.add(new ImageButton(HelperStyle.getStylePets(skinPets, i, i)));
         }
 
         petCurrent = MathUtils.random(0, pets.size - 1) + 1;
@@ -88,7 +90,7 @@ public class PlayScreen implements Screen {
     }
 
     private Table tableTitle(){
-        LabelStyle labelStyleTitle = new LabelStyle(new GeneratorFont(16, Color.WHITE, GeneratorFont.FontType.FONT_BOLD).getFont(), Color.WHITE);
+        LabelStyle labelStyleTitle = new LabelStyle(new GeneratorFont(16, Color.WHITE, FontType.FONT_BOLD).getFont(), Color.WHITE);
         Label titleApp = new Label("Внимание и Скорость", labelStyleTitle);
 
         Table table = new Table();
@@ -121,7 +123,7 @@ public class PlayScreen implements Screen {
         Table table = new Table();
         table.setDebug(isDebug);
 
-        ImageButton petsCurrent = new ImageButton(getStylePets(petCurrent, petCurrent));
+        ImageButton petsCurrent = new ImageButton(HelperStyle.getStylePets(skinPets, petCurrent, petCurrent));
 
         table.add(petsCurrent).size(Gdx.graphics.getWidth() * .8f);
 
@@ -148,22 +150,8 @@ public class PlayScreen implements Screen {
         return table;
     }
 
-    private ImageButton.ImageButtonStyle getStyleButtons(String nameUp, String nameDown){
-        ImageButton.ImageButtonStyle imageButtonStyle = new ImageButton.ImageButtonStyle();
-        imageButtonStyle.up = skinButtons.getDrawable(nameUp);
-        imageButtonStyle.down = skinButtons.getDrawable(nameDown);
-        return imageButtonStyle;
-    }
-
-    private ImageButton.ImageButtonStyle getStylePets(int nameUp, int nameDown){
-        ImageButton.ImageButtonStyle imageButtonStyle = new ImageButton.ImageButtonStyle();
-        imageButtonStyle.up = skinPets.getDrawable("pets" + String.valueOf(nameUp));
-        imageButtonStyle.down = skinPets.getDrawable("pets" + String.valueOf(nameDown));
-        return imageButtonStyle;
-    }
-
     private void generateButton() {
-        backToMenu = new ImageButton(getStyleButtons("back", "back"));
+        backToMenu = new ImageButton(HelperStyle.getStyleButtons(skinButtons,"back","back"));
         backToMenu.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -177,45 +165,44 @@ public class PlayScreen implements Screen {
                 dispose();
             }
         });
-
-        play_and_pause = new ImageButton(getStyleButtons("pause", "pause"));
+        play_and_pause = new ImageButton(HelperStyle.getStyleButtons(skinButtons,"pause","pause"));
         play_and_pause.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (play_and_pause.isPressed()) {
                     if (play_and_pause.isChecked()) {
-                        play_and_pause.setStyle(getStyleButtons("play", "play"));
+                        play_and_pause.setStyle(HelperStyle.getStyleButtons(skinButtons,"play", "play"));
                         pause();
                     } else {
-                        play_and_pause.setStyle(getStyleButtons("pause", "pause"));
+                        play_and_pause.setStyle(HelperStyle.getStyleButtons(skinButtons,"pause","pause"));
                         resume();
                     }
                 }
             }
         });
-        soundOn_soundOff = new ImageButton(getStyleButtons("soundOff", "soundOff"));
+        soundOn_soundOff = new ImageButton(HelperStyle.getStyleButtons(skinButtons,"soundOff","soundOff"));
         soundOn_soundOff.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (soundOn_soundOff.isPressed()) {
                     if (soundOn_soundOff.isChecked()) {
-                        soundOn_soundOff.setStyle(getStyleButtons("soundOn", "soundOn"));
+                        soundOn_soundOff.setStyle(HelperStyle.getStyleButtons(skinButtons,"soundOn", "soundOn"));
                     } else {
-                        soundOn_soundOff.setStyle(getStyleButtons("soundOff", "soundOff"));
+                        soundOn_soundOff.setStyle(HelperStyle.getStyleButtons(skinButtons,"soundOff","soundOff"));
                     }
                 }
             }
         });
-        musicOn_musicOff = new ImageButton(getStyleButtons("musicOff", "musicOff"));
+        musicOn_musicOff = new ImageButton(HelperStyle.getStyleButtons(skinButtons,"musicOff","musicOff"));
         musicOn_musicOff.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (musicOn_musicOff.isPressed()) {
                     if (musicOn_musicOff.isChecked()) {
-                        musicOn_musicOff.setStyle(getStyleButtons("musicOn", "musicOn"));
+                        musicOn_musicOff.setStyle(HelperStyle.getStyleButtons(skinButtons,"musicOn","musicOn"));
 
                     } else {
-                        musicOn_musicOff.setStyle(getStyleButtons("musicOff", "musicOff"));
+                        musicOn_musicOff.setStyle(HelperStyle.getStyleButtons(skinButtons,"musicOff","musicOff"));
 
                     }
                 }
@@ -225,7 +212,7 @@ public class PlayScreen implements Screen {
     }
 
     private void generateLabel(){
-        Label.LabelStyle labelStyleText = new Label.LabelStyle(new GeneratorFont(14, Color.WHITE, GeneratorFont.FontType.FONT_REGULAR).getFont(), Color.WHITE);
+        LabelStyle labelStyleText = new LabelStyle(new GeneratorFont(14, Color.WHITE, FontType.FONT_REGULAR).getFont(), Color.WHITE);
 
         level = new Label("Уровень 4", labelStyleText);
         round = new Label("Раунд 2", labelStyleText);

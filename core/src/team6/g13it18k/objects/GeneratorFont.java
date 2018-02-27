@@ -15,32 +15,20 @@ public class GeneratorFont {
     private Color color;
 
     public enum FontType {
-        FONT_BOLD {
-            @Override
-            public String fontPath() {
-                return "fonts/YanoneKaffeesatz-Bold.ttf";
-            }
-        },
-        FONT_EXTRA_LIGHT {
-            @Override
-            public String fontPath() {
-                return "fonts/YanoneKaffeesatz-ExtraLight.ttf";
-            }
-        },
-        FONT_LIGHT {
-            @Override
-            public String fontPath() {
-                return "fonts/YanoneKaffeesatz-Light.ttf";
-            }
-        },
-        FONT_REGULAR {
-            @Override
-            public String fontPath() {
-                return "fonts/YanoneKaffeesatz-Regular.ttf";
-            }
-        };
+        FONT_BOLD("fonts/YanoneKaffeesatz-Bold.ttf"),
+        FONT_EXTRA_LIGHT("fonts/YanoneKaffeesatz-ExtraLight.ttf"),
+        FONT_LIGHT("fonts/YanoneKaffeesatz-Light.ttf"),
+        FONT_REGULAR("fonts/YanoneKaffeesatz-Regular.ttf");
 
-        public abstract String fontPath();
+        private String text;
+
+        FontType(String text) {
+            this.text = text;
+        }
+
+        public String getText() {
+            return text;
+        }
     }
 
     public GeneratorFont(int size, Color color, FontType type) {
@@ -50,7 +38,7 @@ public class GeneratorFont {
     }
 
     private void generatorFont(FontType type){
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(type.fontPath()));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(type.getText()));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.characters = FONT_CHARACTERS;
         parameter.size = size;

@@ -14,6 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import team6.g13it18k.ASGame;
 import team6.g13it18k.objects.GeneratorFont;
+import team6.g13it18k.objects.GeneratorFont.FontType;
+import team6.g13it18k.objects.HelperStyle;
 
 /**
  * Данный класс реализует окно справки
@@ -23,12 +25,15 @@ public class HelpScreen implements Screen {
     private final ASGame game;
     private Stage stage;
     private ImageButton backToMenu;
+    private Skin skinButtons;
 
     public HelpScreen(final ASGame gam) {
         game = gam;
 
         stage = new Stage();
         stage.addActor(game.background);
+
+        skinButtons = new Skin(game.manager.get("atlas/buttons.atlas", TextureAtlas.class));
 
         Gdx.input.setInputProcessor(stage);
         Gdx.input.setCatchBackKey(true);
@@ -42,13 +47,13 @@ public class HelpScreen implements Screen {
         container.setFillParent(true);
         container.pad(10);
 
-        LabelStyle labelStyleTitle = new LabelStyle(new GeneratorFont(18, Color.WHITE, GeneratorFont.FontType.FONT_BOLD).getFont(), Color.WHITE);
+        LabelStyle labelStyleTitle = new LabelStyle(new GeneratorFont(18, Color.WHITE, FontType.FONT_BOLD).getFont(), Color.WHITE);
         container.add(new Label("Внимание и Скорость : Помощь", labelStyleTitle));
         container.row();
 
         Table table = new Table();
 
-        LabelStyle labelStyleText = new LabelStyle(new GeneratorFont(14, Color.WHITE, GeneratorFont.FontType.FONT_REGULAR).getFont(), Color.WHITE);
+        LabelStyle labelStyleText = new LabelStyle(new GeneratorFont(14, Color.WHITE, FontType.FONT_REGULAR).getFont(), Color.WHITE);
         Label text = new Label(Gdx.files.internal("txt/help.txt").readString("UTF-8"), labelStyleText);
         text.setWrap(true);
 
@@ -65,12 +70,7 @@ public class HelpScreen implements Screen {
     }
 
     private void generateButton() {
-        Skin skin = new Skin(new TextureAtlas(Gdx.files.internal("atlas/back.atlas")));
-
-        ImageButton.ImageButtonStyle imageButtonStyle = new ImageButton.ImageButtonStyle();
-        imageButtonStyle.up = skin.getDrawable("back");
-        imageButtonStyle.down = skin.getDrawable("back");
-        backToMenu = new ImageButton(imageButtonStyle);
+        backToMenu = new ImageButton(HelperStyle.getStyleButtons(skinButtons, "back", "back"));
 
         backToMenu.addListener(new ClickListener() {
             @Override
