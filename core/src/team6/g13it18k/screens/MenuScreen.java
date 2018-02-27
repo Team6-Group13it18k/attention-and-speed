@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -15,7 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import team6.g13it18k.ASGame;
-import team6.g13it18k.objects.BackgroundActor;
 import team6.g13it18k.objects.GeneratorFont;
 
 /**
@@ -27,17 +27,14 @@ public class MenuScreen implements Screen {
 
     private Stage stage;
     private TextButton play, level, record, help;
-    private Label.LabelStyle labelStyleTitle;
+    private LabelStyle labelStyleTitle;
 
     MenuScreen(final ASGame gam) {
         game = gam;
         stage = new Stage();
         stage.addActor(game.background);
 
-        labelStyleTitle = new Label.LabelStyle(
-                new GeneratorFont(18, Color.WHITE, GeneratorFont.FontType.FONT_BOLD).getFont(),
-                Color.WHITE
-        );
+        labelStyleTitle = new LabelStyle(new GeneratorFont(18, Color.WHITE, GeneratorFont.FontType.FONT_BOLD).getFont(), Color.WHITE);
     }
 
     @Override

@@ -11,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import team6.g13it18k.ASGame;
 
 /**
@@ -18,17 +20,13 @@ import team6.g13it18k.ASGame;
  */
 public class SplashScreen implements Screen {
 
-    private Texture splashImage;
-    private Stage stage;
-
     private final ASGame game;
+    private Stage stage;
+    private Texture splashImage;
 
     public SplashScreen(final ASGame gam) {
         game = gam;
         stage = new Stage();
-
-        game.manager.load("atlas/buttons.atlas", TextureAtlas.class);
-        game.manager.load("atlas/pets.atlas", TextureAtlas.class);
     }
 
     @Override

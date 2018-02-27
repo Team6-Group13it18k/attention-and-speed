@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import team6.g13it18k.ASGame;
+import team6.g13it18k.managers.PetImageButton;
 import team6.g13it18k.objects.GeneratorFont;
 import team6.g13it18k.objects.GeneratorFont.FontType;
 import team6.g13it18k.objects.HelperStyle;
@@ -39,22 +40,23 @@ public class PlayScreen implements Screen {
 
     private Skin skinButtons, skinPets;
 
+    private PetImageButton petImageButton;
+
     private Array<ImageButton> pets;
 
     private int countPets = 1;
     private int petCurrent;
 
-    private Boolean isDebug;
 
-    public PlayScreen(final ASGame gam) {
+    PlayScreen(final ASGame gam) {
         game = gam;
         stage = new Stage();
         stage.addActor(game.background);
 
-        isDebug = false;
-
         skinButtons = new Skin(game.manager.get("atlas/buttons.atlas", TextureAtlas.class));
         skinPets = new Skin(game.manager.get("atlas/pets.atlas", TextureAtlas.class));
+
+        petImageButton = new PetImageButton();
 
         pets = new Array<>();
         for (int i = 1; i < 7; i++){
@@ -76,25 +78,32 @@ public class PlayScreen implements Screen {
         container.setFillParent(true);
         container.pad(10);
         container.defaults().expandX();
-        container.setDebug(isDebug);
+        container.setDebug(false);
 
         generateButton();
         generateLabel();
 
-        container.add(tableTitle()).prefWidth(Gdx.graphics.getWidth()).padBottom(10); container.row();
-        container.add(tableStatus()).prefWidth(Gdx.graphics.getWidth()).padBottom(5); container.row();
-        container.add(tablePet()).prefWidth(Gdx.graphics.getWidth()); container.row();
-        container.add(tablePets()).prefWidth(Gdx.graphics.getWidth()); container.row();
+        container.add(tableTitle(false)).prefWidth(Gdx.graphics.getWidth()).padBottom(10);
+        container.row();
+
+        container.add(tableStatus(false)).prefWidth(Gdx.graphics.getWidth()).padBottom(5);
+        container.row();
+
+        container.add(tablePet(false)).prefWidth(Gdx.graphics.getWidth());
+        container.row();
+
+        container.add(tablePets(false)).prefWidth(Gdx.graphics.getWidth());
+        container.row();
 
         stage.addActor(container);
     }
 
-    private Table tableTitle(){
+    private Table tableTitle(Boolean debug){
         LabelStyle labelStyleTitle = new LabelStyle(new GeneratorFont(16, Color.WHITE, FontType.FONT_BOLD).getFont(), Color.WHITE);
         Label titleApp = new Label("Внимание и Скорость", labelStyleTitle);
 
         Table table = new Table();
-        table.setDebug(isDebug);
+        table.setDebug(debug);
 
         table.add(titleApp).expandX().left();
         table.add(backToMenu).size(25);
@@ -105,9 +114,9 @@ public class PlayScreen implements Screen {
         return table;
     }
 
-    private Table tableStatus(){
+    private Table tableStatus(Boolean debug){
         Table table = new Table();
-        table.setDebug(isDebug);
+        table.setDebug(debug);
 
         table.defaults().uniform();
         table.defaults().expandX();
@@ -119,9 +128,9 @@ public class PlayScreen implements Screen {
         return table;
     }
 
-    private Table tablePet(){
+    private Table tablePet(Boolean debug){
         Table table = new Table();
-        table.setDebug(isDebug);
+        table.setDebug(debug);
 
         ImageButton petsCurrent = new ImageButton(HelperStyle.getStylePets(skinPets, petCurrent, petCurrent));
 
@@ -130,11 +139,11 @@ public class PlayScreen implements Screen {
         return table;
     }
 
-    private Table tablePets(){
+    private Table tablePets(Boolean debug){
         int widthPet = (Gdx.graphics.getWidth() / 3) - 5;
 
         Table table = new Table();
-        table.setDebug(isDebug);
+        table.setDebug(debug);
 
         table.defaults().uniform();
         for (ImageButton pet: pets) {

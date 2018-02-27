@@ -27,7 +27,7 @@ public class HelpScreen implements Screen {
     private ImageButton backToMenu;
     private Skin skinButtons;
 
-    public HelpScreen(final ASGame gam) {
+    HelpScreen(final ASGame gam) {
         game = gam;
 
         stage = new Stage();

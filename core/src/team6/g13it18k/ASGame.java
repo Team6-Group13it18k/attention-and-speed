@@ -5,6 +5,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import team6.g13it18k.objects.BackgroundActor;
 import team6.g13it18k.objects.GeneratorFont;
 import team6.g13it18k.objects.GeneratorFont.FontType;
@@ -25,6 +26,9 @@ public class ASGame extends Game {
         background = new BackgroundActor(0, 0);
 
         manager = new AssetManager();
+
+        manager.load("atlas/buttons.atlas", TextureAtlas.class);
+        manager.load("atlas/pets.atlas", TextureAtlas.class);
 
         setScreen(new SplashScreen(this));
     }
