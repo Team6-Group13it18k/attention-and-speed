@@ -49,7 +49,7 @@ public class HelpScreen implements Screen {
         container.pad(10);
 
         LabelStyle labelStyleTitle = new LabelStyle(
-                getFont(Gdx.graphics.getHeight() / 18, FontType.FONT_BOLD),
+                getFont(Gdx.graphics.getHeight() / 18, FontType.FONT_BOLD, .9f),
                 Color.WHITE
         );
 
@@ -71,7 +71,7 @@ public class HelpScreen implements Screen {
         Table table = new Table();
 
         LabelStyle labelStyleText = new LabelStyle(
-                getFont(Gdx.graphics.getHeight() / 14, FontType.FONT_REGULAR),
+                getFont(Gdx.graphics.getHeight() / 14, FontType.FONT_REGULAR, .8f),
                 Color.WHITE
         );
 
@@ -84,8 +84,10 @@ public class HelpScreen implements Screen {
         return new ScrollPane(table);
     }
 
-    private BitmapFont getFont(int size, FontType type){
-        return new GeneratorFont(size, Color.WHITE, type).getFont();
+    private BitmapFont getFont(int size, FontType type, float scale){
+        BitmapFont font = new GeneratorFont(size, Color.WHITE, type).getFont();
+        font.getData().setScale(scale);
+        return font;
     }
 
 
