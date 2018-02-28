@@ -60,7 +60,11 @@ public class HelpScreen implements Screen {
 
         generateButton();
 
-        container.add(backToMenu).bottom().left();
+        int size = Gdx.graphics.getWidth() / 8;
+        Gdx.app.log("HelpScreen", "width - " + Gdx.graphics.getWidth());
+        Gdx.app.log("HelpScreen", "size - " + size);
+
+        container.add(backToMenu).size(size).bottom().left();
 
 
         stage.addActor(container);
@@ -96,6 +100,7 @@ public class HelpScreen implements Screen {
         imageButtonStyle.down = skinButtons.getDrawable("back");
 
         backToMenu = new ImageButton(imageButtonStyle);
+
 
         backToMenu.addListener(new ClickListener() {
             @Override
