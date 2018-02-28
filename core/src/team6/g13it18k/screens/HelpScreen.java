@@ -36,7 +36,6 @@ public class HelpScreen implements Screen {
         skinButtons = new Skin(game.manager.get("atlas/buttons.atlas", TextureAtlas.class));
 
         Gdx.input.setInputProcessor(stage);
-        Gdx.input.setCatchBackKey(true);
     }
 
     @Override
