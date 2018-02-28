@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -47,27 +48,48 @@ public class HelpScreen implements Screen {
         container.setFillParent(true);
         container.pad(10);
 
-        LabelStyle labelStyleTitle = new LabelStyle(new GeneratorFont(18, Color.WHITE, FontType.FONT_BOLD).getFont(), Color.WHITE);
+        LabelStyle labelStyleTitle = new LabelStyle(
+                getFont(Gdx.graphics.getHeight() / 18, FontType.FONT_BOLD, .9f),
+                Color.WHITE
+        );
+
         container.add(new Label("Внимание и Скорость : Помощь", labelStyleTitle));
         container.row();
 
-        Table table = new Table();
-
-        LabelStyle labelStyleText = new LabelStyle(new GeneratorFont(14, Color.WHITE, FontType.FONT_REGULAR).getFont(), Color.WHITE);
-        Label text = new Label(Gdx.files.internal("txt/help.txt").readString("UTF-8"), labelStyleText);
-        text.setWrap(true);
-
-        table.add(text).expandX().width(Gdx.graphics.getWidth()  * .9f).expandY();
+        container.add(scrollPane()).expand().fill().padBottom(5).padTop(5);
+        container.row();
 
         generateButton();
 
-        container.add(new ScrollPane(table)).expand().fill().padBottom(5).padTop(5);
-        container.row();
         container.add(backToMenu).bottom().left();
 
 
         stage.addActor(container);
     }
+
+    private ScrollPane scrollPane(){
+        Table table = new Table();
+
+        LabelStyle labelStyleText = new LabelStyle(
+                getFont(Gdx.graphics.getHeight() / 14, FontType.FONT_REGULAR, .8f),
+                Color.WHITE
+        );
+
+        Label text = new Label(Gdx.files.internal("txt/help.txt").readString("UTF-8"), labelStyleText);
+        text.setWrap(true);
+
+        table.add(text).expandX().width(Gdx.graphics.getWidth()  * .9f).expandY();
+
+
+        return new ScrollPane(table);
+    }
+
+    private BitmapFont getFont(int size, FontType type, float scale){
+        BitmapFont font = new GeneratorFont(size, Color.WHITE, type).getFont();
+        font.getData().setScale(scale);
+        return font;
+    }
+
 
     private void generateButton() {
         backToMenu = new ImageButton(HelperStyle.getStyleButtons(skinButtons, "back", "back"));
