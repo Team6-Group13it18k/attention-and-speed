@@ -16,7 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import team6.g13it18k.ASGame;
 import team6.g13it18k.objects.GeneratorFont;
 import team6.g13it18k.objects.GeneratorFont.FontType;
-import team6.g13it18k.objects.HelperStyle;
 
 /**
  * Данный класс реализует окно справки
@@ -92,7 +91,11 @@ public class HelpScreen implements Screen {
 
 
     private void generateButton() {
-        backToMenu = new ImageButton(HelperStyle.getStyleButtons(skinButtons, "back", "back"));
+        ImageButton.ImageButtonStyle imageButtonStyle = new ImageButton.ImageButtonStyle();
+        imageButtonStyle.up = skinButtons.getDrawable("back");
+        imageButtonStyle.down = skinButtons.getDrawable("back");
+
+        backToMenu = new ImageButton(imageButtonStyle);
 
         backToMenu.addListener(new ClickListener() {
             @Override
