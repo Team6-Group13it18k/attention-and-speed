@@ -2,6 +2,8 @@ package team6.g13it18k;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
@@ -29,6 +31,8 @@ public class ASGame extends Game {
 
         manager.load("atlas/buttons.atlas", TextureAtlas.class);
         manager.load("atlas/pets.atlas", TextureAtlas.class);
+        manager.load("audio/music.mp3", Music.class);
+        manager.load("audio/btnClick.wav", Sound.class);
 
         setScreen(new SplashScreen(this));
     }

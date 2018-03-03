@@ -2,10 +2,14 @@ package team6.g13it18k.screens;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -20,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import team6.g13it18k.ASGame;
+import team6.g13it18k.managers.ASGameStage;
 import team6.g13it18k.managers.PetImageButton;
 import team6.g13it18k.objects.GeneratorFont;
 import team6.g13it18k.objects.GeneratorFont.FontType;
@@ -32,11 +37,11 @@ public class PlayScreen implements Screen {
 
     private final ASGame game;
 
-    private Stage stage;
+    private ASGameStage stage;
 
     private Label level, round, scores, time;
 
-    private ImageButton backToMenu, play_and_pause, soundOn_soundOff, musicOn_musicOff;
+    private ImageButton backToMenu, play_and_pause;
 
     private Skin skinButtons, skinPets;
 
@@ -47,10 +52,14 @@ public class PlayScreen implements Screen {
     private int countPets = 1;
     private int petCurrent;
 
+    private int sizeButton;
+
+    private Music music;
+    private Sound btnClick;
 
     PlayScreen(final ASGame gam) {
         game = gam;
-        stage = new Stage();
+        stage = new ASGameStage();
         stage.addActor(game.background);
 
         skinButtons = new Skin(game.manager.get("atlas/buttons.atlas", TextureAtlas.class));
@@ -65,6 +74,14 @@ public class PlayScreen implements Screen {
 
         petCurrent = MathUtils.random(0, pets.size - 1) + 1;
 
+        sizeButton = Gdx.graphics.getWidth() / 8;
+
+        music = game.manager.get("audio/music.mp3", Music.class);
+        music.setLooping(true);
+        music.setVolume(0.1f);
+
+        btnClick = game.manager.get("audio/btnClick.wav", Sound.class);
+
 
         Gdx.input.setInputProcessor(stage);
         Gdx.input.setCatchBackKey(true);
@@ -73,6 +90,8 @@ public class PlayScreen implements Screen {
     @Override
     public void show() {
         Gdx.app.log("PlayScreen", "show");
+
+        music.play();
 
         Table container = new Table();
         container.setFillParent(true);
@@ -96,20 +115,33 @@ public class PlayScreen implements Screen {
         container.row();
 
         stage.addActor(container);
+
+        stage.setHardKeyListener(new ASGameStage.OnHardKeyListener() {
+            @Override
+            public void onHardKey(int keyCode, int state) {
+                if((keyCode == Input.Keys.BACK  || keyCode == Input.Keys.ESCAPE) && state == 1){
+                    btnClick.play();
+                    game.setScreen(new MenuScreen(game));
+                    dispose();
+                }
+            }
+        });
     }
 
     private Table tableTitle(Boolean debug){
-        LabelStyle labelStyleTitle = new LabelStyle(new GeneratorFont(16, Color.WHITE, FontType.FONT_BOLD).getFont(), Color.WHITE);
+        Label.LabelStyle labelStyleTitle = new Label.LabelStyle(
+                getFont(Gdx.graphics.getHeight() / 16, GeneratorFont.FontType.FONT_BOLD, .9f),
+                Color.WHITE
+        );
+
         Label titleApp = new Label("Внимание и Скорость", labelStyleTitle);
 
         Table table = new Table();
         table.setDebug(debug);
 
         table.add(titleApp).expandX().left();
-        table.add(backToMenu).size(25);
-        table.add(soundOn_soundOff).size(25);
-        table.add(musicOn_musicOff).size(25);
-        table.add(play_and_pause).size(25);
+        table.add(backToMenu).size(sizeButton);
+        table.add(play_and_pause).size(sizeButton);
 
         return table;
     }
@@ -159,12 +191,18 @@ public class PlayScreen implements Screen {
         return table;
     }
 
+    private BitmapFont getFont(int size, GeneratorFont.FontType type, float scale){
+        BitmapFont font = new GeneratorFont(size, Color.WHITE, type).getFont();
+        font.getData().setScale(scale);
+        return font;
+    }
+
     private void generateButton() {
         backToMenu = new ImageButton(HelperStyle.getStyleButtons(skinButtons,"back","back"));
         backToMenu.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.input.vibrate(20);
+                btnClick.play();
                 return true;
             }
 
@@ -179,6 +217,7 @@ public class PlayScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (play_and_pause.isPressed()) {
+                    btnClick.play();
                     if (play_and_pause.isChecked()) {
                         play_and_pause.setStyle(HelperStyle.getStyleButtons(skinButtons,"play", "play"));
                         pause();
@@ -189,35 +228,6 @@ public class PlayScreen implements Screen {
                 }
             }
         });
-        soundOn_soundOff = new ImageButton(HelperStyle.getStyleButtons(skinButtons,"soundOff","soundOff"));
-        soundOn_soundOff.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (soundOn_soundOff.isPressed()) {
-                    if (soundOn_soundOff.isChecked()) {
-                        soundOn_soundOff.setStyle(HelperStyle.getStyleButtons(skinButtons,"soundOn", "soundOn"));
-                    } else {
-                        soundOn_soundOff.setStyle(HelperStyle.getStyleButtons(skinButtons,"soundOff","soundOff"));
-                    }
-                }
-            }
-        });
-        musicOn_musicOff = new ImageButton(HelperStyle.getStyleButtons(skinButtons,"musicOff","musicOff"));
-        musicOn_musicOff.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (musicOn_musicOff.isPressed()) {
-                    if (musicOn_musicOff.isChecked()) {
-                        musicOn_musicOff.setStyle(HelperStyle.getStyleButtons(skinButtons,"musicOn","musicOn"));
-
-                    } else {
-                        musicOn_musicOff.setStyle(HelperStyle.getStyleButtons(skinButtons,"musicOff","musicOff"));
-
-                    }
-                }
-            }
-        });
-
     }
 
     private void generateLabel(){

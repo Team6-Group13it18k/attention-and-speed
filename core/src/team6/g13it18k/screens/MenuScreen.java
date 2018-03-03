@@ -1,9 +1,13 @@
 package team6.g13it18k.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -16,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import team6.g13it18k.ASGame;
+import team6.g13it18k.managers.ASGameStage;
 import team6.g13it18k.objects.GeneratorFont;
 
 /**
@@ -25,21 +30,44 @@ public class MenuScreen implements Screen {
 
     private final ASGame game;
 
-    private Stage stage;
-    private TextButton play, level, record, help;
+    private ASGameStage stage;
+    private TextButton play, level, record, settings, help;
     private LabelStyle labelStyleTitle;
+
+    private Music music;
+    private Sound btnClick;
 
     MenuScreen(final ASGame gam) {
         game = gam;
-        stage = new Stage();
+        stage = new ASGameStage();
         stage.addActor(game.background);
 
-        labelStyleTitle = new LabelStyle(new GeneratorFont(18, Color.WHITE, GeneratorFont.FontType.FONT_BOLD).getFont(), Color.WHITE);
+       labelStyleTitle = new Label.LabelStyle(
+                getFont(Gdx.graphics.getHeight() / 16, GeneratorFont.FontType.FONT_BOLD, .9f),
+                Color.WHITE
+        );
+
+        Gdx.input.setInputProcessor(stage);
+        Gdx.input.setCatchBackKey(true);
+
+        music = game.manager.get("audio/music.mp3", Music.class);
+        music.setLooping(true);
+        music.setVolume(0.1f);
+
+        btnClick = game.manager.get("audio/btnClick.wav", Sound.class);
+    }
+
+    private BitmapFont getFont(int size, GeneratorFont.FontType type, float scale){
+        BitmapFont font = new GeneratorFont(size, Color.WHITE, type).getFont();
+        font.getData().setScale(scale);
+        return font;
     }
 
     @Override
     public void show() {
         Gdx.app.log("MenuScreen", "show");
+
+        music.play();
 
         buttons();
 
@@ -59,11 +87,21 @@ public class MenuScreen implements Screen {
         table.row();
         table.add(record).width(button_width).height(button_height);
         table.row();
+        table.add(settings).width(button_width).height(button_height);
+        table.row();
         table.add(help).width(button_width).height(button_height);
         stage.addActor(table);
 
-        Gdx.input.setInputProcessor(stage);
-        Gdx.input.setCatchBackKey(true);
+        stage.setHardKeyListener(new ASGameStage.OnHardKeyListener() {
+            @Override
+            public void onHardKey(int keyCode, int state) {
+                if((keyCode == Input.Keys.BACK  || keyCode == Input.Keys.ESCAPE) && state == 1){
+                    btnClick.play();
+                    Gdx.app.exit();
+                    dispose();
+                }
+            }
+        });
     }
 
 
@@ -71,7 +109,7 @@ public class MenuScreen implements Screen {
         Skin skin = new Skin(new TextureAtlas(Gdx.files.internal("packer/images.pack")));
 
         TextButtonStyle textButtonStyle = new TextButtonStyle();
-        textButtonStyle.font = game.font;
+        textButtonStyle.font = getFont(Gdx.graphics.getHeight() / 14, GeneratorFont.FontType.FONT_REGULAR, .9f);
         textButtonStyle.up = skin.getDrawable("button-up");
         textButtonStyle.down = skin.getDrawable("button-down");
         textButtonStyle.checked = skin.getDrawable("button-up");
@@ -80,7 +118,7 @@ public class MenuScreen implements Screen {
         play.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.input.vibrate(20);
+                btnClick.play();
                 return true;
             }
             @Override
@@ -93,7 +131,7 @@ public class MenuScreen implements Screen {
         level.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.input.vibrate(20);
+                btnClick.play();
                 return true;
             }
             @Override
@@ -106,7 +144,7 @@ public class MenuScreen implements Screen {
         record.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.input.vibrate(20);
+                btnClick.play();
                 return true;
             }
             @Override
@@ -115,11 +153,24 @@ public class MenuScreen implements Screen {
                 dispose();
             }
         });
+        settings = new TextButton("Настройки", textButtonStyle);
+        settings.addListener(new ClickListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                btnClick.play();
+                return true;
+            }
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                game.setScreen(new SettingsScreen(game));
+                dispose();
+            }
+        });
         help = new TextButton("Помощь", textButtonStyle);
         help.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.input.vibrate(20);
+                btnClick.play();
                 return true;
             }
             @Override
