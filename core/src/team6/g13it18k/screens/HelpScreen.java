@@ -45,11 +45,11 @@ public class HelpScreen implements Screen {
 
         sizeButton = Gdx.graphics.getWidth() / 8;
 
-        music = game.manager.get("audio/music.mp3", Music.class);
+        music = game.manager.get("music.mp3", Music.class);
         music.setLooping(true);
         music.setVolume(0.1f);
 
-        btnClick = game.manager.get("audio/btnClick.wav", Sound.class);
+        btnClick = game.manager.get("btnClick.wav", Sound.class);
 
         Gdx.input.setInputProcessor(stage);
         Gdx.input.setCatchBackKey(true);
