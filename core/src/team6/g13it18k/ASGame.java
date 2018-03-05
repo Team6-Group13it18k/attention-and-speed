@@ -1,6 +1,7 @@
 package team6.g13it18k;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -18,13 +19,20 @@ import team6.g13it18k.screens.SplashScreen;
  */
 public class ASGame extends Game {
 
-    public BitmapFont font;
+    private static final int SIZE_TITLE = 20;
+    private static final int SIZE_TEXT = 18;
+
+    public BitmapFont fontTitle;
+    public BitmapFont fontText;
+
     public BackgroundActor background;
     public AssetManager manager;
 
     @Override
     public void create() {
-        font = new GeneratorFont(18, Color.WHITE, FontType.FONT_REGULAR).getFont();
+        fontTitle = new GeneratorFont(Gdx.graphics.getHeight() / SIZE_TITLE, Color.WHITE, FontType.FONT_BOLD).getFont();
+        fontText = new GeneratorFont(Gdx.graphics.getHeight() / SIZE_TEXT, Color.WHITE, FontType.FONT_REGULAR).getFont();
+
         background = new BackgroundActor(0, 0);
 
         manager = new AssetManager();

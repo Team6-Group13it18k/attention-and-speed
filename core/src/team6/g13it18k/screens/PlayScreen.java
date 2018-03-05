@@ -1,20 +1,16 @@
 package team6.g13it18k.screens;
 
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
@@ -23,12 +19,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
+
 import team6.g13it18k.ASGame;
 import team6.g13it18k.managers.ASGameStage;
-import team6.g13it18k.managers.PetImageButton;
-import team6.g13it18k.objects.GeneratorFont;
-import team6.g13it18k.objects.GeneratorFont.FontType;
-import team6.g13it18k.objects.HelperStyle;
 
 /**
  * Данный класс реализует окно самой игры
@@ -36,7 +29,6 @@ import team6.g13it18k.objects.HelperStyle;
 public class PlayScreen implements Screen {
 
     private final ASGame game;
-
     private ASGameStage stage;
 
     private Label level, round, scores, time;
@@ -44,8 +36,6 @@ public class PlayScreen implements Screen {
     private ImageButton backToMenu, play_and_pause;
 
     private Skin skinButtons, skinPets;
-
-    private PetImageButton petImageButton;
 
     private Array<ImageButton> pets;
 
@@ -65,11 +55,9 @@ public class PlayScreen implements Screen {
         skinButtons = new Skin(game.manager.get("atlas/buttons.atlas", TextureAtlas.class));
         skinPets = new Skin(game.manager.get("atlas/pets.atlas", TextureAtlas.class));
 
-        petImageButton = new PetImageButton();
-
         pets = new Array<>();
         for (int i = 1; i < 7; i++){
-            pets.add(new ImageButton(HelperStyle.getStylePets(skinPets, i, i)));
+            pets.add(new ImageButton(getStylePets(skinPets, i, i)));
         }
 
         petCurrent = MathUtils.random(0, pets.size - 1) + 1;
@@ -85,6 +73,14 @@ public class PlayScreen implements Screen {
 
         Gdx.input.setInputProcessor(stage);
         Gdx.input.setCatchBackKey(true);
+
+        stage.setHardKeyListener((keyCode, state) -> {
+            if((keyCode == Input.Keys.BACK  || keyCode == Input.Keys.ESCAPE) && state == 1){
+                btnClick.play();
+                game.setScreen(new MenuScreen(game));
+                dispose();
+            }
+        });
     }
 
     @Override
@@ -96,59 +92,37 @@ public class PlayScreen implements Screen {
         Table container = new Table();
         container.setFillParent(true);
         container.pad(10);
-        container.defaults().expandX();
-        container.setDebug(false);
 
         generateButton();
         generateLabel();
 
-        container.add(tableTitle(false)).prefWidth(Gdx.graphics.getWidth()).padBottom(10);
+        container.add(tableTitle()).prefWidth(Gdx.graphics.getWidth()).padBottom(10);
         container.row();
 
-        container.add(tableStatus(false)).prefWidth(Gdx.graphics.getWidth()).padBottom(5);
+        container.add(tableStatus()).prefWidth(Gdx.graphics.getWidth()).padBottom(5);
         container.row();
 
-        container.add(tablePet(false)).prefWidth(Gdx.graphics.getWidth());
+        container.add(tablePet()).prefWidth(Gdx.graphics.getWidth());
         container.row();
 
-        container.add(tablePets(false)).prefWidth(Gdx.graphics.getWidth());
+        container.add(tablePets()).prefWidth(Gdx.graphics.getWidth());
         container.row();
 
         stage.addActor(container);
-
-        stage.setHardKeyListener(new ASGameStage.OnHardKeyListener() {
-            @Override
-            public void onHardKey(int keyCode, int state) {
-                if((keyCode == Input.Keys.BACK  || keyCode == Input.Keys.ESCAPE) && state == 1){
-                    btnClick.play();
-                    game.setScreen(new MenuScreen(game));
-                    dispose();
-                }
-            }
-        });
     }
 
-    private Table tableTitle(Boolean debug){
-        Label.LabelStyle labelStyleTitle = new Label.LabelStyle(
-                getFont(Gdx.graphics.getHeight() / 16, GeneratorFont.FontType.FONT_BOLD, .9f),
-                Color.WHITE
-        );
-
-        Label titleApp = new Label("Внимание и Скорость", labelStyleTitle);
-
+    private Table tableTitle(){
         Table table = new Table();
-        table.setDebug(debug);
 
-        table.add(titleApp).expandX().left();
+        table.add(new Label("Внимание и Скорость", new Label.LabelStyle(game.fontTitle, Color.WHITE))).expandX().left();
         table.add(backToMenu).size(sizeButton);
         table.add(play_and_pause).size(sizeButton);
 
         return table;
     }
 
-    private Table tableStatus(Boolean debug){
+    private Table tableStatus(){
         Table table = new Table();
-        table.setDebug(debug);
 
         table.defaults().uniform();
         table.defaults().expandX();
@@ -160,22 +134,20 @@ public class PlayScreen implements Screen {
         return table;
     }
 
-    private Table tablePet(Boolean debug){
+    private Table tablePet(){
         Table table = new Table();
-        table.setDebug(debug);
 
-        ImageButton petsCurrent = new ImageButton(HelperStyle.getStylePets(skinPets, petCurrent, petCurrent));
+        ImageButton petsCurrent = new ImageButton(getStylePets(skinPets, petCurrent, petCurrent));
 
         table.add(petsCurrent).size(Gdx.graphics.getWidth() * .8f);
 
         return table;
     }
 
-    private Table tablePets(Boolean debug){
+    private Table tablePets(){
         int widthPet = (Gdx.graphics.getWidth() / 3) - 5;
 
         Table table = new Table();
-        table.setDebug(debug);
 
         table.defaults().uniform();
         for (ImageButton pet: pets) {
@@ -191,14 +163,8 @@ public class PlayScreen implements Screen {
         return table;
     }
 
-    private BitmapFont getFont(int size, GeneratorFont.FontType type, float scale){
-        BitmapFont font = new GeneratorFont(size, Color.WHITE, type).getFont();
-        font.getData().setScale(scale);
-        return font;
-    }
-
     private void generateButton() {
-        backToMenu = new ImageButton(HelperStyle.getStyleButtons(skinButtons,"back","back"));
+        backToMenu = new ImageButton(getStyleButtons(skinButtons,"back","back"));
         backToMenu.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -212,17 +178,17 @@ public class PlayScreen implements Screen {
                 dispose();
             }
         });
-        play_and_pause = new ImageButton(HelperStyle.getStyleButtons(skinButtons,"pause","pause"));
+        play_and_pause = new ImageButton(getStyleButtons(skinButtons,"pause","pause"));
         play_and_pause.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (play_and_pause.isPressed()) {
                     btnClick.play();
                     if (play_and_pause.isChecked()) {
-                        play_and_pause.setStyle(HelperStyle.getStyleButtons(skinButtons,"play", "play"));
+                        play_and_pause.setStyle(getStyleButtons(skinButtons,"play", "play"));
                         pause();
                     } else {
-                        play_and_pause.setStyle(HelperStyle.getStyleButtons(skinButtons,"pause","pause"));
+                        play_and_pause.setStyle(getStyleButtons(skinButtons,"pause","pause"));
                         resume();
                     }
                 }
@@ -231,12 +197,27 @@ public class PlayScreen implements Screen {
     }
 
     private void generateLabel(){
-        LabelStyle labelStyleText = new LabelStyle(new GeneratorFont(14, Color.WHITE, FontType.FONT_REGULAR).getFont(), Color.WHITE);
+        LabelStyle labelStyleText = new LabelStyle(game.fontText, Color.WHITE);
 
         level = new Label("Уровень 4", labelStyleText);
         round = new Label("Раунд 2", labelStyleText);
         scores = new Label("Счет", labelStyleText);
         time = new Label("Таймер", labelStyleText);
+    }
+
+    private ImageButton.ImageButtonStyle getStylePets(Skin skin, int nameUp, int nameDown){
+        ImageButton.ImageButtonStyle imageButtonStyle = new ImageButton.ImageButtonStyle();
+        imageButtonStyle.up = skin.getDrawable("pets" + String.valueOf(nameUp));
+        imageButtonStyle.down = skin.getDrawable("pets" + String.valueOf(nameDown));
+        return imageButtonStyle;
+    }
+
+    private ImageButton.ImageButtonStyle getStyleButtons(Skin skin, String nameUp, String nameDown){
+        ImageButton.ImageButtonStyle imageButtonStyle = new ImageButton.ImageButtonStyle();
+        imageButtonStyle.up = skin.getDrawable(nameUp);
+        imageButtonStyle.down = skin.getDrawable(nameDown);
+
+        return imageButtonStyle;
     }
 
     @Override
@@ -249,24 +230,16 @@ public class PlayScreen implements Screen {
     }
 
     @Override
-    public void resize(int width, int height) {
-
-    }
+    public void resize(int width, int height) {}
 
     @Override
-    public void pause() {
-
-    }
+    public void pause() {}
 
     @Override
-    public void resume() {
-
-    }
+    public void resume() {}
 
     @Override
-    public void hide() {
-
-    }
+    public void hide() {}
 
     @Override
     public void dispose() {
