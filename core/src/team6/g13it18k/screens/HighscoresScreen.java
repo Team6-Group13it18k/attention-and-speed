@@ -33,6 +33,7 @@ public class HighscoresScreen implements Screen {
 
     private final ASGame game;
     private ASGameStage stage;
+
     private ImageButton backToMenu;
     private Skin skinButtons;
 
@@ -40,8 +41,6 @@ public class HighscoresScreen implements Screen {
 
     private Music music;
     private Sound btnClick;
-
-    private HashMap<Integer, HashMap> dataRecords;
 
     HighscoresScreen(final ASGame gam) {
         game = gam;
@@ -59,12 +58,16 @@ public class HighscoresScreen implements Screen {
 
         btnClick = game.manager.get("btnClick.wav", Sound.class);
 
-        dataRecords = generateTestDataRecords();
-
-
         Gdx.input.setInputProcessor(stage);
         Gdx.input.setCatchBackKey(true);
 
+        stage.setHardKeyListener((keyCode, state) -> {
+            if((keyCode == Input.Keys.BACK  || keyCode == Input.Keys.ESCAPE) && state == 1){
+                btnClick.play();
+                Gdx.app.exit();
+                dispose();
+            }
+        });
     }
 
     @Override
@@ -77,12 +80,7 @@ public class HighscoresScreen implements Screen {
         container.setFillParent(true);
         container.pad(10);
 
-        Label.LabelStyle labelStyleTitle = new Label.LabelStyle(
-                getFont(Gdx.graphics.getHeight() / 16, GeneratorFont.FontType.FONT_BOLD, .9f),
-                Color.WHITE
-        );
-
-        container.add(new Label("Внимание и Скорость : Рекорды", labelStyleTitle));
+        container.add(new Label("Внимание и Скорость : Рекорды", new Label.LabelStyle(game.fontTitle, Color.WHITE)));
         container.row();
 
         container.add(scrollPane()).expand().fill().padBottom(5).padTop(5);
@@ -91,85 +89,27 @@ public class HighscoresScreen implements Screen {
         generateButton();
 
         container.add(backToMenu).size(sizeButton).bottom().left();
-
-
+        
         stage.addActor(container);
-
-        stage.setHardKeyListener(new ASGameStage.OnHardKeyListener() {
-            @Override
-            public void onHardKey(int keyCode, int state) {
-                if((keyCode == Input.Keys.BACK  || keyCode == Input.Keys.ESCAPE) && state == 1){
-                    btnClick.play();
-                    game.setScreen(new MenuScreen(game));
-                    dispose();
-                }
-            }
-        });
     }
 
     private ScrollPane scrollPane(){
         Table table = new Table();
 
-        Label.LabelStyle labelStyleText = new Label.LabelStyle(
-                getFont(Gdx.graphics.getHeight() / 14, GeneratorFont.FontType.FONT_REGULAR, .8f),
-                Color.WHITE
-        );
+        Label.LabelStyle labelStyleText = new Label.LabelStyle(game.fontText, Color.WHITE);
+        for (int i = 0; i < 30; i++){
+            int cur = i++;
 
-        for (Map.Entry<Integer, HashMap> entry : dataRecords.entrySet()){
-            HashMap<String, String> record = entry.getValue();
+            table.add(new Label(cur + " января 2018", labelStyleText));
 
-            Gdx.app.log("HighscoresScreen", record.toString());
+            String recordData = "Уровень: " + cur + "\nЭтап: " + cur;
 
-            /*table.add(new Label(record.get(), labelStyleText));
-            table.add(new Label(dataRecords.get(session), labelStyleText));
-            table.row();*/
+            table.add(new Label(recordData, labelStyleText));
+            table.row();
         }
-
-        Iterator recordsIterator = dataRecords.values().iterator();
-
-        while (recordsIterator.hasNext()){
-
-        }
-
-
-
-        /*for (int idRecord : dataRecords.keySet()){
-            HashMap<String, String> records = dataRecords.get(idRecord);
-
-            for (String session : records.keySet()){
-                table.add(new Label(session, labelStyleText));
-                table.add(new Label(dataRecords.get(session), labelStyleText));
-                table.row();
-            }
-        }*/
-
-
-
-
 
         return new ScrollPane(table);
     }
-
-    private HashMap generateTestDataRecords() {
-        HashMap<Integer, HashMap> dataRecords = new HashMap<Integer, HashMap>();
-
-        HashMap<String, String> records = new HashMap<String, String>();
-
-        for (int i = 0; i < 30; i++){
-            records.put(i++ + " января 2018", "Уровень " + i);
-
-            dataRecords.put(i, records);
-        }
-
-        return dataRecords;
-    }
-
-    private BitmapFont getFont(int size, GeneratorFont.FontType type, float scale){
-        BitmapFont font = new GeneratorFont(size, Color.WHITE, type).getFont();
-        font.getData().setScale(scale);
-        return font;
-    }
-
 
     private void generateButton() {
         ImageButton.ImageButtonStyle imageButtonStyle = new ImageButton.ImageButtonStyle();
@@ -177,8 +117,6 @@ public class HighscoresScreen implements Screen {
         imageButtonStyle.down = skinButtons.getDrawable("back");
 
         backToMenu = new ImageButton(imageButtonStyle);
-
-
         backToMenu.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -192,7 +130,6 @@ public class HighscoresScreen implements Screen {
                 dispose();
             }
         });
-
     }
 
     @Override
@@ -202,31 +139,23 @@ public class HighscoresScreen implements Screen {
 
         stage.act(delta);
         stage.draw();
-
     }
 
     @Override
-    public void resize(int width, int height) {
-
-    }
+    public void resize(int width, int height) {}
 
     @Override
-    public void pause() {
-
-    }
+    public void pause() {}
 
     @Override
-    public void resume() {
-
-    }
+    public void resume() {}
 
     @Override
-    public void hide() {
-
-    }
+    public void hide() {}
 
     @Override
     public void dispose() {
-
+        game.dispose();
+        stage.dispose();
     }
 }
