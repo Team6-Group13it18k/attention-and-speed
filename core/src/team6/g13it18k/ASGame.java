@@ -39,8 +39,8 @@ public class ASGame extends Game {
 
         manager.load("atlas/buttons.atlas", TextureAtlas.class);
         manager.load("atlas/pets.atlas", TextureAtlas.class);
-        manager.load("audio/music.mp3", Music.class);
-        manager.load("audio/btnClick.wav", Sound.class);
+        manager.load("music.mp3", Music.class);
+        manager.load("btnClick.wav", Sound.class);
 
         setScreen(new SplashScreen(this));
     }
