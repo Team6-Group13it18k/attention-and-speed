@@ -29,7 +29,7 @@ import team6.g13it18k.objects.GeneratorFont;
 /**
  * Данный класс реализует окно рекордов
  */
-public class HighscoresScreen implements Screen {
+public class ScoresScreen implements Screen {
 
     private final ASGame game;
     private ASGameStage stage;
@@ -42,7 +42,7 @@ public class HighscoresScreen implements Screen {
     private Music music;
     private Sound btnClick;
 
-    HighscoresScreen(final ASGame gam) {
+    ScoresScreen(final ASGame gam) {
         game = gam;
 
         stage = new ASGameStage();
@@ -61,18 +61,21 @@ public class HighscoresScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
         Gdx.input.setCatchBackKey(true);
 
-        stage.setHardKeyListener((keyCode, state) -> {
-            if((keyCode == Input.Keys.BACK  || keyCode == Input.Keys.ESCAPE) && state == 1){
-                btnClick.play();
-                Gdx.app.exit();
-                dispose();
+        stage.setHardKeyListener(new ASGameStage.OnHardKeyListener() {
+            @Override
+            public void onHardKey(int keyCode, int state) {
+                if((keyCode == Input.Keys.BACK  || keyCode == Input.Keys.ESCAPE) && state == 1){
+                    btnClick.play();
+                    game.setScreen(new MenuScreen(game));
+                    dispose();
+                }
             }
         });
     }
 
     @Override
     public void show() {
-        Gdx.app.log("HighscoresScreen", "show");
+        Gdx.app.log("ScoresScreen", "show");
 
         music.play();
 

@@ -61,11 +61,14 @@ public class LevelScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
         Gdx.input.setCatchBackKey(true);
 
-        stage.setHardKeyListener((keyCode, state) -> {
-            if((keyCode == Input.Keys.BACK  || keyCode == Input.Keys.ESCAPE) && state == 1){
-                btnClick.play();
-                game.setScreen(new MenuScreen(game));
-                dispose();
+        stage.setHardKeyListener(new ASGameStage.OnHardKeyListener() {
+            @Override
+            public void onHardKey(int keyCode, int state) {
+                if((keyCode == Input.Keys.BACK  || keyCode == Input.Keys.ESCAPE) && state == 1){
+                    btnClick.play();
+                    game.setScreen(new MenuScreen(game));
+                    dispose();
+                }
             }
         });
     }

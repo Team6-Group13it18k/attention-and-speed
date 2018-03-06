@@ -55,6 +55,16 @@ public class MenuScreen implements Screen {
                 dispose();
             }
         });
+        stage.setHardKeyListener(new ASGameStage.OnHardKeyListener() {
+            @Override
+            public void onHardKey(int keyCode, int state) {
+                if((keyCode == Input.Keys.BACK  || keyCode == Input.Keys.ESCAPE) && state == 1){
+                    btnClick.play();
+                    Gdx.app.exit();
+                    dispose();
+                }
+            }
+        });
     }
 
     @Override
@@ -132,7 +142,7 @@ public class MenuScreen implements Screen {
             }
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new HighscoresScreen(game));
+                game.setScreen(new ScoresScreen(game));
                 dispose();
             }
         });
