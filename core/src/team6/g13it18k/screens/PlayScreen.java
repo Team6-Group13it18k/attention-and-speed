@@ -127,10 +127,10 @@ public class PlayScreen implements Screen {
     private Table tableStatus(){
         Table table = new Table();
 
-        table.defaults().uniform();
         table.defaults().expandX();
         table.add(level);
         table.add(round);
+        table.row();
         table.add(scores);
         table.add(time);
 

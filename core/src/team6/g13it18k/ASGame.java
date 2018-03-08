@@ -7,8 +7,8 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+
 import team6.g13it18k.objects.BackgroundActor;
 import team6.g13it18k.objects.GeneratorFont;
 import team6.g13it18k.objects.GeneratorFont.FontType;
@@ -20,7 +20,7 @@ import team6.g13it18k.screens.SplashScreen;
 public class ASGame extends Game {
 
     private static final int SIZE_TITLE = 20;
-    private static final int SIZE_TEXT = 18;
+    private static final int SIZE_TEXT = 26;
 
     public BitmapFont fontTitle;
     public BitmapFont fontText;
@@ -36,7 +36,6 @@ public class ASGame extends Game {
         background = new BackgroundActor(0, 0);
 
         manager = new AssetManager();
-
         manager.load("atlas/buttons.atlas", TextureAtlas.class);
         manager.load("atlas/pets.atlas", TextureAtlas.class);
         manager.load("music.mp3", Music.class);

@@ -1,6 +1,5 @@
 package team6.g13it18k.screens;
 
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -8,7 +7,6 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -18,18 +16,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
 import team6.g13it18k.ASGame;
+import team6.g13it18k.database.ScoresTable;
 import team6.g13it18k.managers.ASGameStage;
-import team6.g13it18k.objects.GeneratorFont;
 
 /**
  * Данный класс реализует окно рекордов
  */
 public class ScoresScreen implements Screen {
+
+    private ScoresTable scoresTable;
 
     private final ASGame game;
     private ASGameStage stage;
@@ -47,6 +43,8 @@ public class ScoresScreen implements Screen {
 
         stage = new ASGameStage();
         stage.addActor(game.background);
+
+        scoresTable = new ScoresTable();
 
         skinButtons = new Skin(game.manager.get("atlas/buttons.atlas", TextureAtlas.class));
 
@@ -98,19 +96,19 @@ public class ScoresScreen implements Screen {
 
     private ScrollPane scrollPane(){
         Table table = new Table();
+        table.defaults().expandX();
 
         Label.LabelStyle labelStyleText = new Label.LabelStyle(game.fontText, Color.WHITE);
-        for (int i = 0; i < 30; i++){
-            int cur = i++;
 
-            table.add(new Label(cur + " января 2018", labelStyleText));
+        table.add(new Label("ID записи", labelStyleText));
+        table.add(new Label("Статистика", labelStyleText));
+        table.row();
 
-            String recordData = "Уровень: " + cur + "\nЭтап: " + cur;
-
-            table.add(new Label(recordData, labelStyleText));
+        for (ScoresTable.Record record: scoresTable.getDataFromFields()) {
+            table.add(new Label(String.valueOf(record.id), labelStyleText));
+            table.add(new Label(record.toString(), labelStyleText));
             table.row();
         }
-
         return new ScrollPane(table);
     }
 
@@ -160,5 +158,6 @@ public class ScoresScreen implements Screen {
     public void dispose() {
         game.dispose();
         stage.dispose();
+        scoresTable.dispose();
     }
 }
