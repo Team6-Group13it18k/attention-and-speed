@@ -53,13 +53,11 @@ public class ScoresTable implements Table {
                     .append("); ");
         }
 
-        Gdx.app.log("ScoresTable", execSQL.toString());
-
-        /*try {
+        try {
             dbHandler.execSQL(execSQL.toString());
         } catch (SQLiteGdxException e){
             e.printStackTrace();
-        }*/
+        }
     }
 
     public List<Record> getDataFromFields(){
