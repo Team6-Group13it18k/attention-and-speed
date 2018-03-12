@@ -8,7 +8,9 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.sql.Database;
 
+import team6.g13it18k.database.AppDatabase;
 import team6.g13it18k.objects.BackgroundActor;
 import team6.g13it18k.objects.GeneratorFont;
 import team6.g13it18k.objects.GeneratorFont.FontType;

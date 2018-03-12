@@ -4,14 +4,14 @@ import com.badlogic.gdx.sql.Database;
 import com.badlogic.gdx.sql.DatabaseFactory;
 import com.badlogic.gdx.sql.SQLiteGdxException;
 
-class AppDatabase {
+public class AppDatabase {
 
     private Database dbHandler;
 
     private static final String DATABASE_NAME = "database.db";
     private static final int DATABASE_VERSION = 1;
 
-    AppDatabase(String tableName, Table table) {
+    public AppDatabase(String tableName, Table table) {
         String databaseCreate = "CREATE TABLE IF NOT EXISTS `" + tableName + "` " + table.getCreateFields();
         dbHandler = DatabaseFactory.getNewDatabase(DATABASE_NAME, DATABASE_VERSION, databaseCreate, null);
         dbHandler.setupDatabase();
