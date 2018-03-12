@@ -1,6 +1,5 @@
 package team6.g13it18k.database;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.sql.Database;
 import com.badlogic.gdx.sql.DatabaseCursor;
 import com.badlogic.gdx.sql.SQLiteGdxException;

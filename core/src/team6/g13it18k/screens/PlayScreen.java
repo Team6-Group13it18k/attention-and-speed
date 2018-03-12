@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.Array;
 
 import team6.g13it18k.ASGame;
 import team6.g13it18k.managers.ASGameStage;
+import team6.g13it18k.managers.PetsImageButton;
 
 /**
  * Данный класс реализует окно самой игры
@@ -35,12 +36,9 @@ public class PlayScreen implements Screen {
 
     private ImageButton backToMenu, play_and_pause;
 
-    private Skin skinButtons, skinPets;
+    private Skin skinButtons;
 
-    private Array<ImageButton> pets;
-
-    private int countPets = 1;
-    private int petCurrent;
+    private PetsImageButton petsManager;
 
     private int sizeButton;
 
@@ -53,14 +51,8 @@ public class PlayScreen implements Screen {
         stage.addActor(game.background);
 
         skinButtons = new Skin(game.manager.get("atlas/buttons.atlas", TextureAtlas.class));
-        skinPets = new Skin(game.manager.get("atlas/pets.atlas", TextureAtlas.class));
 
-        pets = new Array<>();
-        for (int i = 1; i < 7; i++){
-            pets.add(new ImageButton(getStylePets(skinPets, i, i)));
-        }
-
-        petCurrent = MathUtils.random(0, pets.size - 1) + 1;
+        petsManager = new PetsImageButton(game);
 
         sizeButton = Gdx.graphics.getWidth() / 8;
 
@@ -69,7 +61,6 @@ public class PlayScreen implements Screen {
         music.setVolume(0.1f);
 
         btnClick = game.manager.get("btnClick.wav", Sound.class);
-
 
         Gdx.input.setInputProcessor(stage);
         Gdx.input.setCatchBackKey(true);
@@ -138,16 +129,19 @@ public class PlayScreen implements Screen {
     }
 
     private Table tablePet(){
+        ImageButton petTask = petsManager.getPet();
+
         Table table = new Table();
 
-        ImageButton petsCurrent = new ImageButton(getStylePets(skinPets, petCurrent, petCurrent));
-
-        table.add(petsCurrent).size(Gdx.graphics.getWidth() * .8f);
+        table.add(petTask).size(Gdx.graphics.getWidth() * .8f);
 
         return table;
     }
 
     private Table tablePets(){
+        Array<ImageButton> pets = petsManager.getPets(btnClick);
+        int countPets = 1;
+
         int widthPet = (Gdx.graphics.getWidth() / 3) - 5;
 
         Table table = new Table();
@@ -206,13 +200,6 @@ public class PlayScreen implements Screen {
         round = new Label("Раунд 2", labelStyleText);
         scores = new Label("Счет", labelStyleText);
         time = new Label("Таймер", labelStyleText);
-    }
-
-    private ImageButton.ImageButtonStyle getStylePets(Skin skin, int nameUp, int nameDown){
-        ImageButton.ImageButtonStyle imageButtonStyle = new ImageButton.ImageButtonStyle();
-        imageButtonStyle.up = skin.getDrawable("pets" + String.valueOf(nameUp));
-        imageButtonStyle.down = skin.getDrawable("pets" + String.valueOf(nameDown));
-        return imageButtonStyle;
     }
 
     private ImageButton.ImageButtonStyle getStyleButtons(Skin skin, String nameUp, String nameDown){

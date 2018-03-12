@@ -6,57 +6,147 @@ filter: Linear,Linear
 repeat: none
 pets1
   rotate: false
-  xy: 442, 542
+  xy: 878, 981
   size: 381, 535
   orig: 381, 535
   offset: 0, 0
   index: -1
+pets11
+  rotate: false
+  xy: 1384, 1558
+  size: 400, 455
+  orig: 400, 455
+  offset: 0, 0
+  index: -1
+pets12
+  rotate: false
+  xy: 1385, 646
+  size: 424, 428
+  orig: 424, 428
+  offset: 0, 0
+  index: -1
+pets15
+  rotate: false
+  xy: 1673, 1100
+  size: 364, 456
+  orig: 364, 456
+  offset: 0, 0
+  index: -1
+pets16
+  rotate: false
+  xy: 492, 2
+  size: 419, 479
+  orig: 419, 479
+  offset: 0, 0
+  index: -1
+pets17
+  rotate: false
+  xy: 959, 1532
+  size: 423, 481
+  orig: 423, 481
+  offset: 0, 0
+  index: -1
+pets19
+  rotate: false
+  xy: 1261, 1076
+  size: 410, 454
+  orig: 410, 454
+  offset: 0, 0
+  index: -1
 pets2
   rotate: false
-  xy: 2, 488
+  xy: 2, 816
   size: 438, 589
   orig: 438, 589
   offset: 0, 0
   index: -1
+pets20
+  rotate: false
+  xy: 1367, 42
+  size: 391, 477
+  orig: 391, 477
+  offset: 0, 0
+  index: -1
 pets3
   rotate: false
-  xy: 2, 1079
+  xy: 2, 1407
   size: 534, 606
   orig: 534, 606
   offset: 0, 0
   index: -1
 pets4
   rotate: false
-  xy: 1028, 1190
+  xy: 538, 1518
   size: 419, 495
   orig: 419, 495
   offset: 0, 0
   index: -1
 pets5
   rotate: false
-  xy: 538, 1188
+  xy: 2, 317
   size: 488, 497
   orig: 488, 497
   offset: 0, 0
   index: -1
 pets6
   rotate: false
-  xy: 1449, 1249
+  xy: 492, 483
   size: 470, 436
   orig: 470, 436
   offset: 0, 0
   index: -1
 pets7
   rotate: false
-  xy: 825, 743
+  xy: 913, 38
   size: 452, 443
   orig: 452, 443
   offset: 0, 0
   index: -1
 pets8
   rotate: false
-  xy: 2, 2
+  xy: 442, 921
   size: 434, 484
   orig: 434, 484
+  offset: 0, 0
+  index: -1
+pets9
+  rotate: false
+  xy: 964, 521
+  size: 419, 458
+  orig: 419, 458
+  offset: 0, 0
+  index: -1
+
+pets2.png
+size: 2048,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+pets10
+  rotate: false
+  xy: 2, 51
+  size: 443, 409
+  orig: 443, 409
+  offset: 0, 0
+  index: -1
+pets13
+  rotate: false
+  xy: 882, 2
+  size: 394, 458
+  orig: 394, 458
+  offset: 0, 0
+  index: -1
+pets14
+  rotate: false
+  xy: 447, 87
+  size: 433, 373
+  orig: 433, 373
+  offset: 0, 0
+  index: -1
+pets18
+  rotate: false
+  xy: 1278, 36
+  size: 388, 424
+  orig: 388, 424
   offset: 0, 0
   index: -1
