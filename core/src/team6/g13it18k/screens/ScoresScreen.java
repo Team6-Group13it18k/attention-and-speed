@@ -44,7 +44,7 @@ public class ScoresScreen implements Screen {
         stage = new ASGameStage();
         stage.addActor(game.background);
 
-        scoresTable = new ScoresTable();
+        scoresTable = new ScoresTable(game.dbHandler);
 
         skinButtons = new Skin(game.manager.get("atlas/buttons.atlas", TextureAtlas.class));
 
@@ -97,6 +97,8 @@ public class ScoresScreen implements Screen {
     private ScrollPane scrollPane(){
         Table table = new Table();
         table.defaults().expandX();
+
+        scoresTable.addData();
 
         Label.LabelStyle labelStyleText = new Label.LabelStyle(game.fontText, Color.WHITE);
 

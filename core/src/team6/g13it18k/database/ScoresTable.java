@@ -35,21 +35,31 @@ public class ScoresTable implements Table {
         }
     }
 
-
-    public ScoresTable() {
-        Gdx.app.log("ScoresTable", "creation started");
-        dbHandler = new AppDatabase(TABLE_NAME, this).getDbHandler();
-        Gdx.app.log("ScoresTable", "created successfully");
+    public ScoresTable(Database dbHandler) {
+        this.dbHandler = dbHandler;
     }
 
     @Override
-    public String getCreateFields() {
-        return "(" +
-                "`id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
-                "`level_num` INTEGER NOT NULL, " +
-                "`stage_num` INTEGER NOT NULL, " +
-                "`experience_num` INTEGER NOT NULL" +
-                ")";
+    public void addData() {
+        StringBuilder execSQL = new StringBuilder();
+        for (int i = 1; i < 11; i++) {
+
+            execSQL.append("INSERT INTO `" + TABLE_NAME + "`(`level_num`,`stage_num`,`experience_num`) " + "VALUES (")
+                    .append(i + 4)
+                    .append(",")
+                    .append(i * 5)
+                    .append(",")
+                    .append(i * 9)
+                    .append("); ");
+        }
+
+        Gdx.app.log("ScoresTable", execSQL.toString());
+
+        /*try {
+            dbHandler.execSQL(execSQL.toString());
+        } catch (SQLiteGdxException e){
+            e.printStackTrace();
+        }*/
     }
 
     public List<Record> getDataFromFields(){
@@ -81,6 +91,5 @@ public class ScoresTable implements Table {
             e.printStackTrace();
         }
         dbHandler = null;
-        Gdx.app.log("ScoresTable", "dispose");
     }
 }

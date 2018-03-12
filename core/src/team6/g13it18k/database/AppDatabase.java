@@ -11,19 +11,25 @@ public class AppDatabase {
     private static final String DATABASE_NAME = "database.db";
     private static final int DATABASE_VERSION = 1;
 
-    public AppDatabase(String tableName, Table table) {
-        String databaseCreate = "CREATE TABLE IF NOT EXISTS `" + tableName + "` " + table.getCreateFields();
-        dbHandler = DatabaseFactory.getNewDatabase(DATABASE_NAME, DATABASE_VERSION, databaseCreate, null);
+    private static final String CREATE_TABLE_SCORES = "CREATE TABLE IF NOT EXISTS `scores` (" +
+            "`id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+            "`level_num` INTEGER NOT NULL, " +
+            "`stage_num` INTEGER NOT NULL, " +
+            "`experience_num` INTEGER NOT NULL" +
+            ")";
+
+    public AppDatabase() {
+        dbHandler = DatabaseFactory.getNewDatabase(DATABASE_NAME, DATABASE_VERSION, null, null);
         dbHandler.setupDatabase();
         try {
             dbHandler.openOrCreateDatabase();
-            dbHandler.execSQL(databaseCreate);
+            dbHandler.execSQL(CREATE_TABLE_SCORES);
         } catch (SQLiteGdxException e) {
             e.printStackTrace();
         }
     }
 
-    Database getDbHandler() {
+    public Database getDbHandler() {
         return dbHandler;
     }
 }

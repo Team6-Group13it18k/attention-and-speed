@@ -29,6 +29,7 @@ public class ASGame extends Game {
 
     public BackgroundActor background;
     public AssetManager manager;
+    public Database dbHandler;
 
     @Override
     public void create() {
@@ -42,6 +43,8 @@ public class ASGame extends Game {
         manager.load("atlas/pets.atlas", TextureAtlas.class);
         manager.load("music.mp3", Music.class);
         manager.load("btnClick.wav", Sound.class);
+
+        dbHandler = new AppDatabase().getDbHandler();
 
         setScreen(new SplashScreen(this));
     }

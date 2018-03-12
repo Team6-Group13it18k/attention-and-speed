@@ -4,8 +4,8 @@ import java.util.List;
 
 public interface Table {
 
+    void addData();
     List<ScoresTable.Record> getDataFromFields();
-	String getCreateFields();
-	void dispose();
+    void dispose();
 
 }
