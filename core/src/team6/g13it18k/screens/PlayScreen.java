@@ -18,11 +18,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Array;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 
 import team6.g13it18k.ASGame;
 import team6.g13it18k.managers.ASGameStage;
-import team6.g13it18k.managers.PetsImageButton;
+import team6.g13it18k.objects.PetImageButtonStyle;
 
 /**
  * Данный класс реализует окно самой игры
@@ -36,9 +39,12 @@ public class PlayScreen implements Screen {
 
     private ImageButton backToMenu, play_and_pause;
 
-    private Skin skinButtons;
+    private ImageButton pet1, pet2, pet3, pet4, pet5, pet6;
 
-    private PetsImageButton petsManager;
+    private Skin skinButtons, skinPets;
+
+    private HashMap<Integer, PetImageButtonStyle> petsImageButtonStyles = new HashMap<>(6);
+    private PetImageButtonStyle petImageButtonStyles;
 
     private int sizeButton;
 
@@ -51,8 +57,11 @@ public class PlayScreen implements Screen {
         stage.addActor(game.background);
 
         skinButtons = new Skin(game.manager.get("atlas/buttons.atlas", TextureAtlas.class));
+        skinPets = new Skin(gam.manager.get("atlas/pets.atlas", TextureAtlas.class));
 
-        petsManager = new PetsImageButton(game);
+        getRandomStyle();
+
+        getStyleToTaskPet();
 
         sizeButton = Gdx.graphics.getWidth() / 8;
 
@@ -75,6 +84,24 @@ public class PlayScreen implements Screen {
                 }
             }
         });
+    }
+
+    private void getRandomStyle() {
+        LinkedHashSet<Integer> numberPets = new LinkedHashSet<>(6);
+
+        while (numberPets.size() != 6){
+            numberPets.add(MathUtils.random(1, 20));
+        }
+
+        int i = 0;
+        for (Integer indexPet: numberPets) {
+            petsImageButtonStyles.put(i, new PetImageButtonStyle(skinPets, indexPet));
+            i++;
+        }
+    }
+
+    private void getStyleToTaskPet() {
+        petImageButtonStyles = petsImageButtonStyles.get(MathUtils.random(0, 5));
     }
 
     @Override
@@ -129,35 +156,39 @@ public class PlayScreen implements Screen {
     }
 
     private Table tablePet(){
-        ImageButton petTask = petsManager.getPet();
-
         Table table = new Table();
 
-        table.add(petTask).size(Gdx.graphics.getWidth() * .8f);
+        table.add(new ImageButton(petImageButtonStyles)).size(Gdx.graphics.getWidth() * .8f);
 
         return table;
     }
 
     private Table tablePets(){
-        Array<ImageButton> pets = petsManager.getPets(btnClick);
-        int countPets = 1;
-
         int widthPet = (Gdx.graphics.getWidth() / 3) - 5;
 
         Table table = new Table();
-
         table.defaults().uniform();
-        for (ImageButton pet: pets) {
-            table.add(pet).size(widthPet);
 
-            if(countPets % 3 == 0){
-                table.row();
-            }
+        generatePetsImageButton();
 
-            countPets++;
-        }
+        table.add(pet1).size(widthPet);
+        table.add(pet2).size(widthPet);
+        table.add(pet3).size(widthPet);
+        table.row();
+        table.add(pet4).size(widthPet);
+        table.add(pet5).size(widthPet);
+        table.add(pet6).size(widthPet);
 
         return table;
+    }
+
+    private void generatePetsImageButton(){
+        pet1 = new ImageButton(petsImageButtonStyles.get(0));
+        pet2 = new ImageButton(petsImageButtonStyles.get(1));
+        pet3 = new ImageButton(petsImageButtonStyles.get(2));
+        pet4 = new ImageButton(petsImageButtonStyles.get(3));
+        pet5 = new ImageButton(petsImageButtonStyles.get(4));
+        pet6 = new ImageButton(petsImageButtonStyles.get(5));
     }
 
     private void generateButton() {
