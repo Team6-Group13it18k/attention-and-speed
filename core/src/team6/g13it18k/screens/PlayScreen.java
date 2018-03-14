@@ -32,14 +32,19 @@ import team6.g13it18k.objects.PetImageButtonStyle;
  */
 public class PlayScreen implements Screen {
 
+    public static final String LEVEL_BASE = "Уровень ";
+    public static final String STAGE_BASE = "Этап ";
+    public static final String SCORES_BASE = "Счет ";
+    public static final String TIME_BASE = "Таймер ";
+
     private final ASGame game;
     private ASGameStage stage;
 
-    private Label level, round, scores, time;
+    private Label levelLabel, stageLabel, scoresLabel, timeLabel;
 
     private ImageButton backToMenu, play_and_pause;
 
-    private ImageButton pet1, pet2, pet3, pet4, pet5, pet6;
+    private ImageButton pet1, pet2, pet3, pet4, pet5, pet6, petTask;
 
     private Skin skinButtons, skinPets;
 
@@ -47,6 +52,37 @@ public class PlayScreen implements Screen {
     private PetImageButtonStyle petImageButtonStyles;
 
     private int sizeButton;
+
+    private Boolean isReplaceStyle = false;
+    private Boolean isUpdateLabel = false;
+
+    private Statistics stats;
+
+    private class Statistics {
+        int level;
+        int stage;
+        int scores;
+        int time;
+
+        Statistics(int level, int stage, int scores, int time) {
+            this.level = level;
+            this.stage = stage;
+            this.scores = scores;
+            this.time = time;
+        }
+
+        void setLevel(int level) {
+            this.level = level;
+        }
+
+        void setStage(int stage) {
+            this.stage = stage;
+        }
+
+        void setScores(int scores) {
+            this.scores = scores;
+        }
+    }
 
     private Music music;
     private Sound btnClick;
@@ -62,6 +98,8 @@ public class PlayScreen implements Screen {
         getRandomStyle();
 
         getStyleToTaskPet();
+
+        stats = new Statistics(0,0,0,0);
 
         sizeButton = Gdx.graphics.getWidth() / 8;
 
@@ -146,11 +184,11 @@ public class PlayScreen implements Screen {
         Table table = new Table();
 
         table.defaults().expandX();
-        table.add(level);
-        table.add(round);
+        table.add(levelLabel);
+        table.add(stageLabel);
         table.row();
-        table.add(scores);
-        table.add(time);
+        table.add(scoresLabel);
+        table.add(timeLabel);
 
         return table;
     }
@@ -158,7 +196,9 @@ public class PlayScreen implements Screen {
     private Table tablePet(){
         Table table = new Table();
 
-        table.add(new ImageButton(petImageButtonStyles)).size(Gdx.graphics.getWidth() * .8f);
+        petTask = new ImageButton(petImageButtonStyles);
+
+        table.add(petTask).size(Gdx.graphics.getWidth() * .8f);
 
         return table;
     }
@@ -184,11 +224,49 @@ public class PlayScreen implements Screen {
 
     private void generatePetsImageButton(){
         pet1 = new ImageButton(petsImageButtonStyles.get(0));
+        pet1.addListener(getListenerPetButton(0));
+
         pet2 = new ImageButton(petsImageButtonStyles.get(1));
+        pet2.addListener(getListenerPetButton(1));
+
         pet3 = new ImageButton(petsImageButtonStyles.get(2));
+        pet3.addListener(getListenerPetButton(2));
+
         pet4 = new ImageButton(petsImageButtonStyles.get(3));
+        pet4.addListener(getListenerPetButton(3));
+
         pet5 = new ImageButton(petsImageButtonStyles.get(4));
+        pet5.addListener(getListenerPetButton(4));
+
         pet6 = new ImageButton(petsImageButtonStyles.get(5));
+        pet6.addListener(getListenerPetButton(5));
+    }
+
+    private ClickListener getListenerPetButton(int numberStyle){
+        return new ClickListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                btnClick.play();
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                if(petsImageButtonStyles.get(numberStyle).indexPet == petImageButtonStyles.indexPet){
+                    stats.setScores(stats.scores + 5);
+                } else {
+                    stats.setScores(stats.scores - 2);
+                }
+                stats.setStage(stats.stage + 1);
+
+
+                getRandomStyle();
+                getStyleToTaskPet();
+                isReplaceStyle = true;
+                isUpdateLabel = true;
+
+            }
+        };
     }
 
     private void generateButton() {
@@ -227,10 +305,10 @@ public class PlayScreen implements Screen {
     private void generateLabel(){
         LabelStyle labelStyleText = new LabelStyle(game.fontText, Color.WHITE);
 
-        level = new Label("Уровень 4", labelStyleText);
-        round = new Label("Раунд 2", labelStyleText);
-        scores = new Label("Счет", labelStyleText);
-        time = new Label("Таймер", labelStyleText);
+        levelLabel = new Label(LEVEL_BASE + stats.level , labelStyleText);
+        stageLabel = new Label(STAGE_BASE + stats.stage, labelStyleText);
+        scoresLabel = new Label(SCORES_BASE + stats.scores, labelStyleText);
+        timeLabel = new Label(TIME_BASE + stats.time, labelStyleText);
     }
 
     private ImageButton.ImageButtonStyle getStyleButtons(Skin skin, String nameUp, String nameDown){
@@ -248,6 +326,26 @@ public class PlayScreen implements Screen {
 
         stage.act(delta);
         stage.draw();
+
+        if(isReplaceStyle){
+            petTask.setStyle(petImageButtonStyles);
+            pet1.setStyle(petsImageButtonStyles.get(0));
+            pet2.setStyle(petsImageButtonStyles.get(1));
+            pet3.setStyle(petsImageButtonStyles.get(2));
+            pet4.setStyle(petsImageButtonStyles.get(3));
+            pet5.setStyle(petsImageButtonStyles.get(4));
+            pet6.setStyle(petsImageButtonStyles.get(5));
+
+            isReplaceStyle = false;
+        }
+
+        if(isUpdateLabel){
+            levelLabel.setText(LEVEL_BASE + stats.level);
+            stageLabel.setText(STAGE_BASE + stats.stage);
+            scoresLabel.setText(SCORES_BASE + stats.scores);
+
+            isUpdateLabel = false;
+        }
     }
 
     @Override
