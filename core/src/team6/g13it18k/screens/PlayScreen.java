@@ -20,7 +20,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 
 import team6.g13it18k.ASGame;
@@ -32,10 +31,12 @@ import team6.g13it18k.objects.PetImageButtonStyle;
  */
 public class PlayScreen implements Screen {
 
-    public static final String LEVEL_BASE = "Уровень ";
-    public static final String STAGE_BASE = "Этап ";
-    public static final String SCORES_BASE = "Счет ";
-    public static final String TIME_BASE = "Таймер ";
+    private static final String LEVEL_BASE = "Уровень ";
+    private static final String STAGE_BASE = "Этап ";
+    private static final String SCORES_BASE = "Счет ";
+    private static final String TIME_BASE = "Таймер ";
+
+    private static final int TIMER = 10;
 
     private final ASGame game;
     private ASGameStage stage;
@@ -53,8 +54,13 @@ public class PlayScreen implements Screen {
 
     private int sizeButton;
 
+    private float startTime = 0;
+
+    private float timeSeconds = 0f;
+
     private Boolean isReplaceStyle = false;
     private Boolean isUpdateLabel = false;
+    private Boolean isUpdateTimerLabel = false;
 
     private Statistics stats;
 
@@ -82,6 +88,10 @@ public class PlayScreen implements Screen {
         void setScores(int scores) {
             this.scores = scores;
         }
+
+        void setTime(int time){
+            this.time = time;
+        }
     }
 
     private Music music;
@@ -99,7 +109,7 @@ public class PlayScreen implements Screen {
 
         getStyleToTaskPet();
 
-        stats = new Statistics(0,0,0,0);
+        stats = new Statistics(0,0,0, TIMER);
 
         sizeButton = Gdx.graphics.getWidth() / 8;
 
@@ -327,6 +337,28 @@ public class PlayScreen implements Screen {
         stage.act(delta);
         stage.draw();
 
+        if(startTime > TIMER){
+            stats.setLevel(stats.level + 1);
+            stats.setStage(0);
+            stats.setScores(0);
+            stats.setTime(TIMER);
+
+            isUpdateLabel = true;
+            isUpdateTimerLabel = true;
+
+            startTime = 0;
+        } else {
+            timeSeconds += Gdx.graphics.getRawDeltaTime();
+            float period = 1f;
+            if(timeSeconds > period){
+                timeSeconds -= period;
+                stats.setTime(stats.time - 1);
+                isUpdateTimerLabel = true;
+            }
+
+            startTime += delta;
+        }
+
         if(isReplaceStyle){
             petTask.setStyle(petImageButtonStyles);
             pet1.setStyle(petsImageButtonStyles.get(0));
@@ -345,6 +377,12 @@ public class PlayScreen implements Screen {
             scoresLabel.setText(SCORES_BASE + stats.scores);
 
             isUpdateLabel = false;
+        }
+
+        if(isUpdateTimerLabel){
+            timeLabel.setText(TIME_BASE + stats.time);
+
+            isUpdateTimerLabel = false;
         }
     }
 
