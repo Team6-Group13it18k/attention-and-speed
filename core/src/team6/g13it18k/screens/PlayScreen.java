@@ -3,8 +3,6 @@ package team6.g13it18k.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -94,9 +92,6 @@ public class PlayScreen implements Screen {
         }
     }
 
-    private Music music;
-    private Sound btnClick;
-
     PlayScreen(final ASGame gam) {
         game = gam;
         stage = new ASGameStage();
@@ -113,12 +108,6 @@ public class PlayScreen implements Screen {
 
         sizeButton = Gdx.graphics.getWidth() / 8;
 
-        music = game.manager.get("music.mp3", Music.class);
-        music.setLooping(true);
-        music.setVolume(0.1f);
-
-        btnClick = game.manager.get("btnClick.wav", Sound.class);
-
         Gdx.input.setInputProcessor(stage);
         Gdx.input.setCatchBackKey(true);
 
@@ -126,7 +115,9 @@ public class PlayScreen implements Screen {
             @Override
             public void onHardKey(int keyCode, int state) {
                 if((keyCode == Input.Keys.BACK  || keyCode == Input.Keys.ESCAPE) && state == 1){
-                    btnClick.play();
+                    if(game.getPreferences().isSoundEffectsEnabled()){
+                        game.btnClick.play();
+                    }
                     game.setScreen(new MenuScreen(game));
                     dispose();
                 }
@@ -155,8 +146,6 @@ public class PlayScreen implements Screen {
     @Override
     public void show() {
         Gdx.app.log("PlayScreen", "show");
-
-        music.play();
 
         Table container = new Table();
         container.setFillParent(true);
@@ -256,7 +245,9 @@ public class PlayScreen implements Screen {
         return new ClickListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                btnClick.play();
+                if(game.getPreferences().isSoundEffectsEnabled()){
+                    game.btnClick.play();
+                }
                 return true;
             }
 
@@ -284,7 +275,9 @@ public class PlayScreen implements Screen {
         backToMenu.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                btnClick.play();
+                if(game.getPreferences().isSoundEffectsEnabled()){
+                    game.btnClick.play();
+                }
                 return true;
             }
 
@@ -299,7 +292,9 @@ public class PlayScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (play_and_pause.isPressed()) {
-                    btnClick.play();
+                    if(game.getPreferences().isSoundEffectsEnabled()){
+                        game.btnClick.play();
+                    }
                     if (play_and_pause.isChecked()) {
                         play_and_pause.setStyle(getStyleButtons(skinButtons,"play", "play"));
                         pause();

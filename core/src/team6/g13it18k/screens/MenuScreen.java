@@ -30,20 +30,12 @@ public class MenuScreen implements Screen {
 
     private TextButton play, level, record, settings, help;
 
-    private Music music;
-    private Sound btnClick;
-
     MenuScreen(final ASGame gam) {
         game = gam;
         stage = new ASGameStage();
         stage.addActor(game.background);
 
-
-        music = game.manager.get("music.mp3", Music.class);
-        music.setLooping(true);
-        music.setVolume(0.1f);
-
-        btnClick = game.manager.get("btnClick.wav", Sound.class);
+        buttons();
 
         Gdx.input.setInputProcessor(stage);
         Gdx.input.setCatchBackKey(true);
@@ -52,7 +44,9 @@ public class MenuScreen implements Screen {
             @Override
             public void onHardKey(int keyCode, int state) {
                 if((keyCode == Input.Keys.BACK  || keyCode == Input.Keys.ESCAPE) && state == 1){
-                    btnClick.play();
+                    if(game.getPreferences().isSoundEffectsEnabled()){
+                        game.btnClick.play();
+                    }
                     Gdx.app.exit();
                     dispose();
                 }
@@ -64,11 +58,9 @@ public class MenuScreen implements Screen {
     public void show() {
         Gdx.app.log("MenuScreen", "show");
 
-        music.play();
-
-        buttons();
-
-
+        if(game.getPreferences().isMusicEnabled()){
+            game.music.play();
+        }
 
         Table table = new Table().center();
         table.setFillParent(true);
@@ -104,7 +96,9 @@ public class MenuScreen implements Screen {
         play.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                btnClick.play();
+                if(game.getPreferences().isSoundEffectsEnabled()){
+                    game.btnClick.play();
+                }
                 return true;
             }
             @Override
@@ -117,7 +111,9 @@ public class MenuScreen implements Screen {
         level.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                btnClick.play();
+                if(game.getPreferences().isSoundEffectsEnabled()){
+                    game.btnClick.play();
+                }
                 return true;
             }
             @Override
@@ -130,7 +126,9 @@ public class MenuScreen implements Screen {
         record.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                btnClick.play();
+                if(game.getPreferences().isSoundEffectsEnabled()){
+                    game.btnClick.play();
+                }
                 return true;
             }
             @Override
@@ -143,7 +141,9 @@ public class MenuScreen implements Screen {
         settings.addListener(new ClickListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                btnClick.play();
+                if(game.getPreferences().isSoundEffectsEnabled()){
+                    game.btnClick.play();
+                }
                 return true;
             }
             @Override
@@ -156,7 +156,9 @@ public class MenuScreen implements Screen {
         help.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                btnClick.play();
+                if(game.getPreferences().isSoundEffectsEnabled()){
+                    game.btnClick.play();
+                }
                 return true;
             }
             @Override

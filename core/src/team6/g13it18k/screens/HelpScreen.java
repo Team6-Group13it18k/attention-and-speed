@@ -3,8 +3,6 @@ package team6.g13it18k.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -29,8 +27,6 @@ public class HelpScreen implements Screen {
 
     private int sizeButton;
 
-    private Music music;
-    private Sound btnClick;
 
     HelpScreen(final ASGame gam) {
         game = gam;
@@ -42,11 +38,6 @@ public class HelpScreen implements Screen {
 
         sizeButton = Gdx.graphics.getWidth() / 8;
 
-        music = game.manager.get("music.mp3", Music.class);
-        music.setLooping(true);
-        music.setVolume(0.1f);
-
-        btnClick = game.manager.get("btnClick.wav", Sound.class);
 
         Gdx.input.setInputProcessor(stage);
         Gdx.input.setCatchBackKey(true);
@@ -55,7 +46,9 @@ public class HelpScreen implements Screen {
             @Override
             public void onHardKey(int keyCode, int state) {
                 if((keyCode == Input.Keys.BACK  || keyCode == Input.Keys.ESCAPE) && state == 1){
-                    btnClick.play();
+                    if(game.getPreferences().isSoundEffectsEnabled()){
+                        game.btnClick.play();
+                    }
                     game.setScreen(new MenuScreen(game));
                     dispose();
                 }
@@ -66,8 +59,6 @@ public class HelpScreen implements Screen {
     @Override
     public void show() {
         Gdx.app.log("HelpScreen", "show");
-
-        music.play();
 
         Table container = new Table();
         container.setFillParent(true);
@@ -109,7 +100,9 @@ public class HelpScreen implements Screen {
         backToMenu.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                btnClick.play();
+                if(game.getPreferences().isSoundEffectsEnabled()){
+                    game.btnClick.play();
+                }
                 return true;
             }
 

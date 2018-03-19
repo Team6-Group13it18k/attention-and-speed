@@ -2,6 +2,8 @@ package team6.g13it18k.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -19,32 +21,29 @@ public class SplashScreen implements Screen {
 
     private final ASGame game;
     private Stage stage;
-    private Texture splashImage;
+    private Texture textureLogo;
+    private Image logo;
 
     public SplashScreen(final ASGame gam) {
         game = gam;
         stage = new Stage();
+
+        textureLogo = new Texture("logo.png");
+        textureLogo.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+        logo = new Image(new TextureRegion(textureLogo, 0, 0, 512, 128));
     }
 
     @Override
     public void show() {
-        Gdx.app.log("SplashScreen", "show");
-        splashImage = new Texture("logo.png");
-        splashImage.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-
-        Image actorImage = new Image(new TextureRegion(splashImage, 0, 0, 512, 128));
-
         float width = Gdx.graphics.getWidth();
         float height = Gdx.graphics.getHeight();
         float desiredWidth = width * .9f;
-        float scale = desiredWidth / actorImage.getWidth();
+        float scale = desiredWidth / logo.getWidth();
 
-        actorImage.setSize(actorImage.getWidth() * scale, actorImage.getHeight() * scale);
-        actorImage.setPosition(width / 2 - actorImage.getWidth() / 2, height / 2 - actorImage.getHeight() / 2);
-
-        actorImage.addAction(sequence(fadeOut(2)));
-
-        stage.addActor(actorImage);
+        logo.setSize(logo.getWidth() * scale, logo.getHeight() * scale);
+        logo.setPosition(width / 2 - logo.getWidth() / 2, height / 2 - logo.getHeight() / 2);
+        logo.addAction(sequence(fadeOut(2)));
+        stage.addActor(logo);
     }
 
     @Override
@@ -56,6 +55,13 @@ public class SplashScreen implements Screen {
         stage.draw();
 
         if(game.manager.update()){
+
+            game.music = game.manager.get("music.mp3", Music.class);
+            game.music.setLooping(true);
+            game.music.setVolume(0.1f);
+
+            game.btnClick = game.manager.get("btnClick.wav", Sound.class);
+
             game.setScreen(new MenuScreen(game));
             dispose();
         }
@@ -77,6 +83,6 @@ public class SplashScreen implements Screen {
     public void dispose() {
         game.dispose();
         stage.dispose();
-        splashImage.dispose();
+        textureLogo.dispose();
     }
 }
