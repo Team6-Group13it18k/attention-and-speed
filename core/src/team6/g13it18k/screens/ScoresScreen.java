@@ -70,7 +70,7 @@ public class ScoresScreen implements Screen {
         container.add(new Label("Внимание и Скорость : Рекорды", new Label.LabelStyle(game.fontTitle, Color.WHITE)));
         container.row();
 
-        container.add(scrollPane()).expand().padBottom(5).padTop(5);
+        container.add(scrollPane()).expand().fill().padBottom(5).padTop(5);
         container.row();
 
         ImageButton.ImageButtonStyle imageButtonStyle = new ImageButton.ImageButtonStyle();
@@ -101,19 +101,18 @@ public class ScoresScreen implements Screen {
 
     private ScrollPane scrollPane(){
         Table table = new Table();
-
-        scoresTable.addData();
+        table.defaults().expandX();
 
         Label.LabelStyle labelStyleText = new Label.LabelStyle(game.fontText, Color.WHITE);
 
         table.add(new Label("ID записи", labelStyleText));
         table.add(new Label("Статистика", labelStyleText));
-        table.row();
+        table.row().padBottom(15);
 
         for (ScoresTable.Record record: scoresTable.getDataFromFields()) {
             table.add(new Label(String.valueOf(record.id), labelStyleText));
             table.add(new Label(record.toString(), labelStyleText));
-            table.row();
+            table.row().padBottom(10);
         }
         return new ScrollPane(table);
     }

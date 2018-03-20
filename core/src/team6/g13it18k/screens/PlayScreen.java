@@ -7,20 +7,19 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 
 import team6.g13it18k.ASGame;
+import team6.g13it18k.database.ScoresTable;
 import team6.g13it18k.managers.ASGameStage;
 import team6.g13it18k.objects.PetImageButtonStyle;
 
@@ -36,12 +35,12 @@ public class PlayScreen implements Screen {
 
     private static final int TIMER = 10;
 
+    private ScoresTable scoresTable;
+
     private final ASGame game;
     private ASGameStage stage;
 
     private Label levelLabel, stageLabel, scoresLabel, timeLabel;
-
-    private ImageButton backToMenu, play_and_pause;
 
     private ImageButton pet1, pet2, pet3, pet4, pet5, pet6, petTask;
 
@@ -90,6 +89,10 @@ public class PlayScreen implements Screen {
         void setTime(int time){
             this.time = time;
         }
+
+        String getStats(){
+            return "(" + this.level + ", " + this.stage + ", " + scores + ")";
+        }
     }
 
     PlayScreen(final ASGame gam) {
@@ -100,15 +103,16 @@ public class PlayScreen implements Screen {
         skinButtons = new Skin(game.manager.get("atlas/buttons.atlas", TextureAtlas.class));
         skinPets = new Skin(gam.manager.get("atlas/pets.atlas", TextureAtlas.class));
 
+        scoresTable = new ScoresTable(game.dbHandler);
+
         getRandomStyle();
 
         getStyleToTaskPet();
 
-        stats = new Statistics(0,0,0, TIMER);
+        stats = new Statistics(1,0,0, TIMER);
 
         sizeButton = Gdx.graphics.getWidth() / 8;
 
-        generateButton();
         generateLabel();
 
         Gdx.input.setInputProcessor(stage);
@@ -121,6 +125,7 @@ public class PlayScreen implements Screen {
                     if(game.getPreferences().isSoundEffectsEnabled()){
                         game.btnClick.play();
                     }
+                    scoresTable.save(stats.getStats());
                     game.setScreen(new MenuScreen(game));
                     dispose();
                 }
@@ -170,9 +175,30 @@ public class PlayScreen implements Screen {
     private Table tableTitle(){
         Table table = new Table();
 
+        ImageButton.ImageButtonStyle imageButtonStyle = new ImageButton.ImageButtonStyle();
+        imageButtonStyle.up = skinButtons.getDrawable("back");
+        imageButtonStyle.down = skinButtons.getDrawable("back");
+
+        ImageButton backToMenu = new ImageButton(imageButtonStyle);
+        backToMenu.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if(game.getPreferences().isSoundEffectsEnabled()){
+                    game.btnClick.play();
+                }
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                game.setScreen(new MenuScreen(game));
+                dispose();
+            }
+        });
+
+
         table.add(new Label("Внимание и Скорость", new Label.LabelStyle(game.fontTitle, Color.WHITE))).expandX().left();
-        table.add(backToMenu).size(sizeButton);
-        table.add(play_and_pause).size(sizeButton);
+        table.add(backToMenu).size(sizeButton).right();
 
         return table;
     }
@@ -268,41 +294,6 @@ public class PlayScreen implements Screen {
         };
     }
 
-    private void generateButton() {
-        backToMenu = new ImageButton(getStyleButtons(skinButtons,"back","back"));
-        backToMenu.addListener(new ClickListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if(game.getPreferences().isSoundEffectsEnabled()){
-                    game.btnClick.play();
-                }
-                return true;
-            }
-
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new MenuScreen(game));
-                dispose();
-            }
-        });
-        play_and_pause = new ImageButton(getStyleButtons(skinButtons,"pause","pause"));
-        play_and_pause.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (play_and_pause.isPressed()) {
-                    if(game.getPreferences().isSoundEffectsEnabled()){
-                        game.btnClick.play();
-                    }
-                    if (play_and_pause.isChecked()) {
-                        play_and_pause.setStyle(getStyleButtons(skinButtons,"play", "play"));
-                    } else {
-                        play_and_pause.setStyle(getStyleButtons(skinButtons,"pause","pause"));
-                    }
-                }
-            }
-        });
-    }
-
     private void generateLabel(){
         LabelStyle labelStyleText = new LabelStyle(game.fontText, Color.WHITE);
 
@@ -310,14 +301,6 @@ public class PlayScreen implements Screen {
         stageLabel = new Label(STAGE_BASE + stats.stage, labelStyleText);
         scoresLabel = new Label(SCORES_BASE + stats.scores, labelStyleText);
         timeLabel = new Label(TIME_BASE + stats.time, labelStyleText);
-    }
-
-    private ImageButton.ImageButtonStyle getStyleButtons(Skin skin, String nameUp, String nameDown){
-        ImageButton.ImageButtonStyle imageButtonStyle = new ImageButton.ImageButtonStyle();
-        imageButtonStyle.up = skin.getDrawable(nameUp);
-        imageButtonStyle.down = skin.getDrawable(nameDown);
-
-        return imageButtonStyle;
     }
 
     @Override
@@ -329,6 +312,8 @@ public class PlayScreen implements Screen {
         stage.draw();
 
         if(startTime > TIMER){
+            scoresTable.save(stats.getStats());
+
             stats.setLevel(stats.level + 1);
             stats.setStage(0);
             stats.setScores(0);

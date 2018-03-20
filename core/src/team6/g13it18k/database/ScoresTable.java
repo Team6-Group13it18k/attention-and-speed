@@ -1,5 +1,6 @@
 package team6.g13it18k.database;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.sql.Database;
 import com.badlogic.gdx.sql.DatabaseCursor;
 import com.badlogic.gdx.sql.SQLiteGdxException;
@@ -7,7 +8,7 @@ import com.badlogic.gdx.sql.SQLiteGdxException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ScoresTable implements Table {
+public class ScoresTable{
 
     private Database dbHandler;
 
@@ -38,22 +39,13 @@ public class ScoresTable implements Table {
         this.dbHandler = dbHandler;
     }
 
-    @Override
-    public void addData() {
-        StringBuilder execSQL = new StringBuilder();
-        for (int i = 1; i < 11; i++) {
-
-            execSQL.append("INSERT INTO `" + TABLE_NAME + "`(`level_num`,`stage_num`,`experience_num`) " + "VALUES (")
-                    .append(i + 4)
-                    .append(",")
-                    .append(i * 5)
-                    .append(",")
-                    .append(i * 9)
-                    .append("); ");
-        }
+    public void save(String data){
+        String sql = "INSERT INTO `" + TABLE_NAME + "` (`level_num`,`stage_num`,`experience_num`) VALUES " + data;
+        Gdx.app.log("ScoresTable insert", sql);
 
         try {
-            dbHandler.execSQL(execSQL.toString());
+            dbHandler.openOrCreateDatabase();
+            dbHandler.execSQL(sql);
         } catch (SQLiteGdxException e){
             e.printStackTrace();
         }
