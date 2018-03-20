@@ -8,8 +8,8 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = "Attention and Speed";
-		config.width =  360;
-		config.height = 700;
+		config.width =  260;
+		config.height = 540;
 		new LwjglApplication(new ASGame(), config);
 	}
 }

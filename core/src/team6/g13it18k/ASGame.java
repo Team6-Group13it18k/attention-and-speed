@@ -49,14 +49,6 @@ public class ASGame extends Game {
 
         preferences = new AppPreferences();
 
-        if(!preferences.isMusicContains()){
-            preferences.setMusicEnabled(true);
-        }
-
-        if(!preferences.isSoundEffectsContains()){
-            preferences.setSoundEffectsEnabled(true);
-        }
-
         manager = new AssetManager();
         manager.load("atlas/buttons.atlas", TextureAtlas.class);
         manager.load("atlas/pets.atlas", TextureAtlas.class);

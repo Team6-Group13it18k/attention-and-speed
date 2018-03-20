@@ -3,8 +3,6 @@ package team6.g13it18k.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -28,14 +26,14 @@ public class MenuScreen implements Screen {
 
     private ASGameStage stage;
 
-    private TextButton play, level, record, settings, help;
+    private TextButton play, record, settings, help;
 
     MenuScreen(final ASGame gam) {
         game = gam;
         stage = new ASGameStage();
         stage.addActor(game.background);
 
-        buttons();
+        createButtons();
 
         Gdx.input.setInputProcessor(stage);
         Gdx.input.setCatchBackKey(true);
@@ -56,8 +54,6 @@ public class MenuScreen implements Screen {
 
     @Override
     public void show() {
-        Gdx.app.log("MenuScreen", "show");
-
         if(game.getPreferences().isMusicEnabled()){
             game.music.play();
         }
@@ -72,8 +68,6 @@ public class MenuScreen implements Screen {
         table.row();
         table.add(play).width(button_width).height(button_height);
         table.row();
-        table.add(level).width(button_width).height(button_height);
-        table.row();
         table.add(record).width(button_width).height(button_height);
         table.row();
         table.add(settings).width(button_width).height(button_height);
@@ -83,7 +77,7 @@ public class MenuScreen implements Screen {
     }
 
 
-    private void buttons(){
+    private void createButtons(){
         Skin skin = new Skin(new TextureAtlas(Gdx.files.internal("packer/images.pack")));
 
         TextButtonStyle textButtonStyle = new TextButtonStyle();
@@ -107,21 +101,7 @@ public class MenuScreen implements Screen {
                 dispose();
             }
         });
-        level = new TextButton("Уровни", textButtonStyle);
-        level.addListener(new ClickListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if(game.getPreferences().isSoundEffectsEnabled()){
-                    game.btnClick.play();
-                }
-                return true;
-            }
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new LevelScreen(game));
-                dispose();
-            }
-        });
+
         record = new TextButton("Рекорды", textButtonStyle);
         record.addListener(new ClickListener() {
             @Override
@@ -137,6 +117,7 @@ public class MenuScreen implements Screen {
                 dispose();
             }
         });
+
         settings = new TextButton("Настройки", textButtonStyle);
         settings.addListener(new ClickListener(){
             @Override
@@ -152,6 +133,7 @@ public class MenuScreen implements Screen {
                 dispose();
             }
         });
+
         help = new TextButton("Помощь", textButtonStyle);
         help.addListener(new ClickListener() {
             @Override

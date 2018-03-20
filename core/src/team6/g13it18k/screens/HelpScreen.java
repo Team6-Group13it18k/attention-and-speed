@@ -21,12 +21,7 @@ public class HelpScreen implements Screen {
 
     private final ASGame game;
     private ASGameStage stage;
-
-    private ImageButton backToMenu;
     private Skin skinButtons;
-
-    private int sizeButton;
-
 
     HelpScreen(final ASGame gam) {
         game = gam;
@@ -35,9 +30,6 @@ public class HelpScreen implements Screen {
         stage.addActor(game.background);
 
         skinButtons = new Skin(game.manager.get("atlas/buttons.atlas", TextureAtlas.class));
-
-        sizeButton = Gdx.graphics.getWidth() / 8;
-
 
         Gdx.input.setInputProcessor(stage);
         Gdx.input.setCatchBackKey(true);
@@ -58,8 +50,6 @@ public class HelpScreen implements Screen {
 
     @Override
     public void show() {
-        Gdx.app.log("HelpScreen", "show");
-
         Table container = new Table();
         container.setFillParent(true);
         container.pad(10);
@@ -67,36 +57,14 @@ public class HelpScreen implements Screen {
         container.add(new Label("Внимание и Скорость : Помощь", new LabelStyle(game.fontTitle, Color.WHITE)));
         container.row();
 
-        container.add(scrollPane()).expand().fill().padBottom(5).padTop(5);
+        container.add(scrollPane()).expand().padBottom(5).padTop(5);
         container.row();
 
-        generateButton();
-
-        container.add(backToMenu).size(sizeButton).bottom().left();
-
-        stage.addActor(container);
-    }
-
-    private ScrollPane scrollPane(){
-        Table table = new Table();
-
-        LabelStyle labelStyleText = new LabelStyle(game.fontText, Color.WHITE);
-
-        Label text = new Label(Gdx.files.internal("txt/help.txt").readString("UTF-8"), labelStyleText);
-        text.setWrap(true);
-
-        table.add(text).expandX().width(Gdx.graphics.getWidth()  * .9f).expandY();
-
-
-        return new ScrollPane(table);
-    }
-
-    private void generateButton() {
         ImageButton.ImageButtonStyle imageButtonStyle = new ImageButton.ImageButtonStyle();
         imageButtonStyle.up = skinButtons.getDrawable("back");
         imageButtonStyle.down = skinButtons.getDrawable("back");
 
-        backToMenu = new ImageButton(imageButtonStyle);
+        ImageButton backToMenu = new ImageButton(imageButtonStyle);
         backToMenu.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -113,6 +81,22 @@ public class HelpScreen implements Screen {
             }
         });
 
+        container.add(backToMenu).size(Gdx.graphics.getWidth() / 8).bottom().left();
+
+        stage.addActor(container);
+    }
+
+    private ScrollPane scrollPane(){
+        Table table = new Table();
+
+        LabelStyle labelStyleText = new LabelStyle(game.fontText, Color.WHITE);
+
+        Label text = new Label(Gdx.files.internal("txt/help.txt").readString("UTF-8"), labelStyleText);
+        text.setWrap(true);
+
+        table.add(text).expandX().width(Gdx.graphics.getWidth()  * .9f).expandY();
+
+        return new ScrollPane(table);
     }
 
     @Override

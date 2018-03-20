@@ -23,10 +23,6 @@ public class AppPreferences {
         getPrefs().flush();
     }
 
-    public boolean isSoundEffectsContains(){
-        return getPrefs().contains(PREF_SOUND_ENABLED);
-    }
-
     public boolean isMusicEnabled(){
         return getPrefs().getBoolean(PREF_MUSIC_ENABLED);
     }
@@ -35,9 +31,4 @@ public class AppPreferences {
         getPrefs().putBoolean(PREF_MUSIC_ENABLED, musicEffectsEnabled);
         getPrefs().flush();
     }
-
-    public boolean isMusicContains(){
-        return getPrefs().contains(PREF_MUSIC_ENABLED);
-    }
-
 }

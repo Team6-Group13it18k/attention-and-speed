@@ -108,6 +108,9 @@ public class PlayScreen implements Screen {
 
         sizeButton = Gdx.graphics.getWidth() / 8;
 
+        generateButton();
+        generateLabel();
+
         Gdx.input.setInputProcessor(stage);
         Gdx.input.setCatchBackKey(true);
 
@@ -145,14 +148,9 @@ public class PlayScreen implements Screen {
 
     @Override
     public void show() {
-        Gdx.app.log("PlayScreen", "show");
-
         Table container = new Table();
         container.setFillParent(true);
         container.pad(10);
-
-        generateButton();
-        generateLabel();
 
         container.add(tableTitle()).prefWidth(Gdx.graphics.getWidth()).padBottom(10);
         container.row();
@@ -297,10 +295,8 @@ public class PlayScreen implements Screen {
                     }
                     if (play_and_pause.isChecked()) {
                         play_and_pause.setStyle(getStyleButtons(skinButtons,"play", "play"));
-                        pause();
                     } else {
                         play_and_pause.setStyle(getStyleButtons(skinButtons,"pause","pause"));
-                        resume();
                     }
                 }
             }

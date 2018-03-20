@@ -28,7 +28,6 @@ public class ScoresScreen implements Screen {
     private final ASGame game;
     private ASGameStage stage;
 
-    private ImageButton backToMenu;
     private Skin skinButtons;
 
     private int sizeButton;
@@ -64,9 +63,6 @@ public class ScoresScreen implements Screen {
 
     @Override
     public void show() {
-        Gdx.app.log("ScoresScreen", "show");
-
-
         Table container = new Table();
         container.setFillParent(true);
         container.pad(10);
@@ -74,42 +70,14 @@ public class ScoresScreen implements Screen {
         container.add(new Label("Внимание и Скорость : Рекорды", new Label.LabelStyle(game.fontTitle, Color.WHITE)));
         container.row();
 
-        container.add(scrollPane()).expand().fill().padBottom(5).padTop(5);
+        container.add(scrollPane()).expand().padBottom(5).padTop(5);
         container.row();
 
-        generateButton();
-
-        container.add(backToMenu).size(sizeButton).bottom().left();
-        
-        stage.addActor(container);
-    }
-
-    private ScrollPane scrollPane(){
-        Table table = new Table();
-        table.defaults().expandX();
-
-        scoresTable.addData();
-
-        Label.LabelStyle labelStyleText = new Label.LabelStyle(game.fontText, Color.WHITE);
-
-        table.add(new Label("ID записи", labelStyleText));
-        table.add(new Label("Статистика", labelStyleText));
-        table.row();
-
-        for (ScoresTable.Record record: scoresTable.getDataFromFields()) {
-            table.add(new Label(String.valueOf(record.id), labelStyleText));
-            table.add(new Label(record.toString(), labelStyleText));
-            table.row();
-        }
-        return new ScrollPane(table);
-    }
-
-    private void generateButton() {
         ImageButton.ImageButtonStyle imageButtonStyle = new ImageButton.ImageButtonStyle();
         imageButtonStyle.up = skinButtons.getDrawable("back");
         imageButtonStyle.down = skinButtons.getDrawable("back");
 
-        backToMenu = new ImageButton(imageButtonStyle);
+        ImageButton backToMenu = new ImageButton(imageButtonStyle);
         backToMenu.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -125,6 +93,29 @@ public class ScoresScreen implements Screen {
                 dispose();
             }
         });
+
+        container.add(backToMenu).size(sizeButton).bottom().left();
+        
+        stage.addActor(container);
+    }
+
+    private ScrollPane scrollPane(){
+        Table table = new Table();
+
+        scoresTable.addData();
+
+        Label.LabelStyle labelStyleText = new Label.LabelStyle(game.fontText, Color.WHITE);
+
+        table.add(new Label("ID записи", labelStyleText));
+        table.add(new Label("Статистика", labelStyleText));
+        table.row();
+
+        for (ScoresTable.Record record: scoresTable.getDataFromFields()) {
+            table.add(new Label(String.valueOf(record.id), labelStyleText));
+            table.add(new Label(record.toString(), labelStyleText));
+            table.row();
+        }
+        return new ScrollPane(table);
     }
 
     @Override
