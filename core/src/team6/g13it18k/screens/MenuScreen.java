@@ -78,7 +78,7 @@ public class MenuScreen implements Screen {
 
 
     private void createButtons(){
-        Skin skin = new Skin(new TextureAtlas(Gdx.files.internal("packer/images.pack")));
+        Skin skin = new Skin(game.manager.get("atlas/pets.atlas", TextureAtlas.class));
 
         TextButtonStyle textButtonStyle = new TextButtonStyle();
         textButtonStyle.font = game.fontText;

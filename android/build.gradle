@@ -24,9 +24,18 @@ android {
         versionCode 1
         versionName "1.0"
     }
+    signingConfigs {
+        release {
+            storeFile file("D:\\development\\keystore.jks")
+            storePassword "attentionSpeedPass"
+            keyAlias "attentionSpeed"
+            keyPassword "attentionSpeedPass"
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

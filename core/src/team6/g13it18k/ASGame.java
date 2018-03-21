@@ -52,6 +52,7 @@ public class ASGame extends Game {
         manager = new AssetManager();
         manager.load("atlas/buttons.atlas", TextureAtlas.class);
         manager.load("atlas/pets.atlas", TextureAtlas.class);
+        manager.load("atlas/images.pack", TextureAtlas.class);
         manager.load("music.mp3", Music.class);
         manager.load("btnClick.wav", Sound.class);
 

@@ -101,7 +101,7 @@ public class PlayScreen implements Screen {
         stage.addActor(game.background);
 
         skinButtons = new Skin(game.manager.get("atlas/buttons.atlas", TextureAtlas.class));
-        skinPets = new Skin(gam.manager.get("atlas/pets.atlas", TextureAtlas.class));
+        skinPets = new Skin(game.manager.get("atlas/pets.atlas", TextureAtlas.class));
 
         scoresTable = new ScoresTable(game.dbHandler);
 

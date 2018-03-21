@@ -19,8 +19,6 @@ public class GeneratorFont {
 
     public enum FontType {
         FONT_BOLD("fonts/YanoneKaffeesatz-Bold.ttf"),
-        FONT_EXTRA_LIGHT("fonts/YanoneKaffeesatz-ExtraLight.ttf"),
-        FONT_LIGHT("fonts/YanoneKaffeesatz-Light.ttf"),
         FONT_REGULAR("fonts/YanoneKaffeesatz-Regular.ttf");
 
         private String text;
