@@ -26,10 +26,10 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file("D:\\development\\keystore.jks")
-            storePassword "attentionSpeedPass"
-            keyAlias "attentionSpeed"
-            keyPassword "attentionSpeedPass"
+            /*//storeFile file("D:\\development\\keystore.jks")
+            //storePassword "attentionSpeedPass"
+            //keyAlias "attentionSpeed"
+            //keyPassword "attentionSpeedPass"*/
         }
     }
     buildTypes {

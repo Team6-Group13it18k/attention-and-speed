@@ -20,6 +20,7 @@ import team6.g13it18k.managers.ASGameStage;
 /**
  * Данный класс реализует окно меню
  */
+//todo разобраться почему падает
 public class MenuScreen implements Screen {
 
     private final ASGame game;
@@ -78,7 +79,7 @@ public class MenuScreen implements Screen {
 
 
     private void createButtons(){
-        Skin skin = new Skin(game.manager.get("atlas/pets.atlas", TextureAtlas.class));
+        Skin skin = new Skin(game.manager.get("atlas/images.pack", TextureAtlas.class));
 
         TextButtonStyle textButtonStyle = new TextButtonStyle();
         textButtonStyle.font = game.fontText;
